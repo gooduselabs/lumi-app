@@ -1,0 +1,298 @@
+{
+  "@@locale": "vi",
+  "appTagline": "Gặp gỡ những tâm hồn đồng điệu",
+  "welcomeTitle": "Trò chuyện ẩn danh,\nkết nối thật lòng",
+  "welcomeSubtitle": "Ghép đôi ngẫu nhiên với người lạ. Nếu cả hai cùng thích, hai bạn sẽ thành bạn bè.",
+  "getStarted": "Bắt đầu",
+  "haveAccount": "Tôi đã có tài khoản",
+  "email": "Email",
+  "password": "Mật khẩu",
+  "confirmPassword": "Nhập lại mật khẩu",
+  "newPassword": "Mật khẩu mới",
+  "login": "Đăng nhập",
+  "loginTitle": "Chào mừng trở lại",
+  "loginSubtitle": "Đăng nhập để tiếp tục trò chuyện",
+  "register": "Đăng ký",
+  "registerTitle": "Tạo tài khoản",
+  "registerSubtitle": "Chỉ cần email. Chúng tôi sẽ gửi mã xác minh 6 số.",
+  "forgotPassword": "Quên mật khẩu?",
+  "forgotTitle": "Quên mật khẩu",
+  "forgotSubtitle": "Nhập email đã đăng ký, chúng tôi sẽ gửi mã đặt lại mật khẩu.",
+  "sendCode": "Gửi mã",
+  "resetTitle": "Đặt lại mật khẩu",
+  "resetSubtitle": "Nhập mã 6 số đã gửi tới {email} và mật khẩu mới.",
+  "@resetSubtitle": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "resetAction": "Đổi mật khẩu",
+  "verifyTitle": "Xác minh email",
+  "verifySubtitle": "Nhập mã 6 số chúng tôi vừa gửi tới\n{email}",
+  "@verifySubtitle": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "verifyAction": "Xác minh",
+  "resendCode": "Gửi lại mã",
+  "resendIn": "Gửi lại sau {seconds}s",
+  "@resendIn": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "codeSent": "Đã gửi mã mới",
+  "devCodeHint": "Mã thử nghiệm (dev): {code} — chạm để điền",
+  "@devCodeHint": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "noAccount": "Chưa có tài khoản?",
+  "termsNote": "Bằng việc tiếp tục, bạn xác nhận đã đủ 18 tuổi và đồng ý với Điều khoản & Chính sách cộng đồng.",
+  "validationEmail": "Email không hợp lệ",
+  "validationPassword": "Tối thiểu 8 ký tự, gồm cả chữ và số",
+  "validationPasswordMatch": "Mật khẩu không khớp",
+  "validationRequired": "Bắt buộc",
+  "passwordChanged": "Đã đổi mật khẩu",
+  "onbStep": "Bước {current}/{total}",
+  "@onbStep": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "onbNameTitle": "Bạn tên là gì?",
+  "onbNameSubtitle": "Biệt danh sẽ chỉ hiện khi hai bạn đã thành bạn bè.",
+  "nickname": "Biệt danh",
+  "gender": "Giới tính",
+  "genderMale": "Nam",
+  "genderFemale": "Nữ",
+  "genderOther": "Khác",
+  "onbBirthdayTitle": "Sinh nhật của bạn",
+  "onbBirthdaySubtitle": "Lumi chỉ dành cho người từ 18 tuổi trở lên. Ngày sinh không hiển thị công khai, chỉ hiện tuổi.",
+  "pickBirthday": "Chọn ngày sinh",
+  "ageYears": "{age} tuổi",
+  "@ageYears": {
+    "placeholders": {
+      "age": {
+        "type": "int"
+      }
+    }
+  },
+  "underageError": "Bạn cần đủ 18 tuổi để sử dụng Lumi",
+  "onbAvatarTitle": "Chọn avatar",
+  "onbAvatarSubtitle": "Không cần ảnh thật. Hãy chọn nhân vật đại diện cho bạn.",
+  "onbInterestsTitle": "Sở thích & giới thiệu",
+  "onbInterestsSubtitle": "Chọn tối đa {max} sở thích để dễ tìm người hợp gu.",
+  "@onbInterestsSubtitle": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "bio": "Giới thiệu ngắn",
+  "bioHint": "Một câu về bạn…",
+  "next": "Tiếp tục",
+  "back": "Quay lại",
+  "finish": "Hoàn tất",
+  "tabDiscover": "Khám phá",
+  "tabFeed": "Bảng tin",
+  "tabChats": "Tin nhắn",
+  "tabMe": "Tôi",
+  "hello": "Xin chào, {name}",
+  "@hello": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "onlineNow": "{count} người đang online",
+  "@onlineNow": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "soulMatch": "Soul Match",
+  "soulMatchDesc": "Chat ẩn danh {minutes} phút với một người lạ",
+  "@soulMatchDesc": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "voiceMatch": "Voice Match",
+  "voiceMatchDesc": "Gọi thoại ẩn danh {minutes} phút",
+  "@voiceMatchDesc": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "matchFilter": "Muốn gặp",
+  "filterAny": "Mọi người",
+  "start": "Bắt đầu",
+  "howItWorks": "Cách hoạt động",
+  "how1": "Ghép ngẫu nhiên với một người lạ đang online",
+  "how2": "Trò chuyện ẩn danh trước khi hết giờ",
+  "how3": "Cả hai cùng thả tim → thành bạn bè",
+  "searching": "Đang tìm người phù hợp…",
+  "searchingHint": "Giữ ứng dụng mở nhé. Thường mất vài giây.",
+  "cancel": "Hủy",
+  "stranger": "Người lạ bí ẩn",
+  "commonInterests": "Cùng thích",
+  "soulIntro": "Hai bạn đã được ghép! Hãy chào nhau trước khi hết giờ nhé.",
+  "typeMessage": "Nhập tin nhắn…",
+  "partnerTyping": "Đang soạn tin…",
+  "partnerLiked": "Đối phương đã thả tim cho bạn 💜",
+  "youLiked": "Bạn đã thả tim. Chờ đối phương…",
+  "like": "Thích",
+  "skip": "Bỏ qua",
+  "skipConfirm": "Kết thúc cuộc trò chuyện này?",
+  "endedTimeout": "Hết giờ rồi",
+  "endedSkipped": "Cuộc trò chuyện đã kết thúc",
+  "endedPartnerSkipped": "Đối phương đã rời đi",
+  "endedPartnerLeft": "Đối phương mất kết nối",
+  "endedBlocked": "Đã chặn người này",
+  "endedHint": "Đừng buồn, người tiếp theo có thể là tri kỷ của bạn!",
+  "findAnother": "Tìm người khác",
+  "backHome": "Về trang chủ",
+  "mutualTitle": "Hai bạn đã thành bạn bè!",
+  "mutualSubtitle": "Giờ bạn có thể nhắn tin với {name} bất cứ lúc nào.",
+  "@mutualSubtitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "sayHi": "Nhắn tin ngay",
+  "voiceConnecting": "Đang kết nối giọng nói…",
+  "voiceConnected": "Đang trò chuyện",
+  "voiceUnavailable": "Voice Match chưa được bật trên máy chủ này",
+  "mute": "Tắt mic",
+  "unmute": "Bật mic",
+  "speaking": "Đang nói…",
+  "micPermission": "Cần quyền micro để gọi thoại",
+  "chatsTitle": "Tin nhắn",
+  "friendsTitle": "Bạn bè",
+  "noChats": "Chưa có cuộc trò chuyện",
+  "noChatsHint": "Thử Soul Match để kết bạn mới nhé!",
+  "noFriends": "Chưa có bạn bè",
+  "goMatch": "Đi ghép đôi",
+  "online": "Đang online",
+  "offline": "Offline",
+  "seen": "Đã xem",
+  "sent": "Đã gửi",
+  "sending": "Đang gửi…",
+  "failedTapRetry": "Gửi lỗi · chạm để thử lại",
+  "systemMatched": "Hai bạn đã kết nối qua Soul Match ✨",
+  "chatBlocked": "Bạn không thể nhắn tin với người này",
+  "you": "Bạn",
+  "unfriend": "Hủy kết bạn",
+  "unfriendConfirm": "Hủy kết bạn và xóa lịch sử trò chuyện?",
+  "viewProfile": "Xem hồ sơ",
+  "feedTitle": "Bảng tin",
+  "feedEmpty": "Chưa có bài viết nào",
+  "feedEmptyHint": "Hãy là người đầu tiên chia sẻ khoảnh khắc!",
+  "newPost": "Chia sẻ khoảnh khắc",
+  "postHint": "Bạn đang nghĩ gì?",
+  "post": "Đăng",
+  "deletePost": "Xóa bài viết",
+  "posted": "Đã đăng",
+  "me": "Tôi",
+  "editProfile": "Chỉnh sửa hồ sơ",
+  "settings": "Cài đặt",
+  "save": "Lưu",
+  "saved": "Đã lưu",
+  "interests": "Sở thích",
+  "language": "Ngôn ngữ",
+  "blockedUsers": "Người đã chặn",
+  "noBlocked": "Bạn chưa chặn ai",
+  "unblock": "Bỏ chặn",
+  "logout": "Đăng xuất",
+  "logoutConfirm": "Bạn muốn đăng xuất?",
+  "deleteAccount": "Xóa tài khoản",
+  "deleteAccountConfirm": "Toàn bộ dữ liệu, bạn bè và tin nhắn sẽ bị xóa vĩnh viễn. Tiếp tục?",
+  "about": "Giới thiệu",
+  "server": "Máy chủ",
+  "version": "Phiên bản",
+  "safetyCenter": "An toàn cộng đồng",
+  "safetyText": "Không chia sẻ thông tin cá nhân với người lạ. Báo cáo ngay nếu gặp hành vi quấy rối.",
+  "report": "Báo cáo",
+  "block": "Chặn",
+  "blockConfirm": "Chặn người này? Hai bạn sẽ không thể ghép đôi hay nhắn tin với nhau.",
+  "reportTitle": "Báo cáo người dùng",
+  "reportReason": "Lý do",
+  "reasonSpam": "Spam / quảng cáo",
+  "reasonHarassment": "Quấy rối, xúc phạm",
+  "reasonInappropriate": "Nội dung không phù hợp",
+  "reasonUnderage": "Dưới 18 tuổi",
+  "reasonScam": "Lừa đảo",
+  "reasonOther": "Khác",
+  "reportDetails": "Mô tả thêm (không bắt buộc)",
+  "reportSent": "Cảm ơn bạn! Chúng tôi sẽ xem xét báo cáo.",
+  "submit": "Gửi",
+  "confirm": "Xác nhận",
+  "close": "Đóng",
+  "retry": "Thử lại",
+  "loading": "Đang tải…",
+  "connecting": "Đang kết nối…",
+  "somethingWrong": "Đã có lỗi xảy ra",
+  "errNetwork": "Không kết nối được máy chủ. Kiểm tra mạng hoặc địa chỉ máy chủ.",
+  "errInvalidCredentials": "Email hoặc mật khẩu không đúng",
+  "errEmailTaken": "Email này đã được đăng ký",
+  "errInvalidCode": "Mã không đúng hoặc đã hết hạn",
+  "errTooManyAttempts": "Nhập sai quá nhiều lần. Hãy yêu cầu mã mới.",
+  "errCooldown": "Vui lòng đợi {seconds}s trước khi gửi lại mã",
+  "@errCooldown": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "errSession": "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.",
+  "errRateLimited": "Bạn thao tác quá nhanh, thử lại sau nhé",
+  "errSessionClosed": "Phiên ghép đôi đã kết thúc",
+  "errBlocked": "Bạn không thể tương tác với người này",
+  "interest_music": "Âm nhạc",
+  "interest_movies": "Phim ảnh",
+  "interest_gaming": "Game",
+  "interest_travel": "Du lịch",
+  "interest_food": "Ăn uống",
+  "interest_sports": "Thể thao",
+  "interest_reading": "Đọc sách",
+  "interest_anime": "Anime",
+  "interest_photography": "Nhiếp ảnh",
+  "interest_art": "Nghệ thuật",
+  "interest_tech": "Công nghệ",
+  "interest_pets": "Thú cưng",
+  "interest_fitness": "Gym",
+  "interest_coffee": "Cà phê",
+  "interest_fashion": "Thời trang",
+  "interest_kpop": "K-pop",
+  "interest_astrology": "Chiêm tinh",
+  "interest_dance": "Nhảy",
+  "interest_nature": "Thiên nhiên",
+  "interest_study": "Học tập"
+}
