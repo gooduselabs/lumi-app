@@ -1,0 +1,212 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum CodePurpose {
+  VERIFY_EMAIL
+  RESET_PASSWORD
+}
+
+enum MatchMode {
+  SOUL
+  VOICE
+}
+
+enum MatchStatus {
+  ACTIVE
+  ENDED
+  MUTUAL
+}
+
+enum MessageType {
+  TEXT
+  SYSTEM
+}
+
+enum ReportReason {
+  SPAM
+  HARASSMENT
+  INAPPROPRIATE
+  UNDERAGE
+  SCAM
+  OTHER
+}
+
+model User {
+  id              String    @id @default(uuid())
+  email           String    @unique
+  passwordHash    String
+  emailVerifiedAt DateTime?
+  nickname        String?
+  gender          Gender?
+  birthday        DateTime? @db.Date
+  avatarId        String?
+  bio             String?
+  interests       String[]  @default([])
+  onboardedAt     DateTime?
+  locale          String    @default("vi")
+  fcmToken        String?
+  lastSeenAt      DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  refreshTokens RefreshToken[]
+  memberships   ConversationMember[]
+  messages      Message[]
+  blocks        Block[]              @relation("blocker")
+  blockedBy     Block[]              @relation("blocked")
+  reports       Report[]             @relation("reporter")
+  reportedIn    Report[]             @relation("target")
+  posts         Post[]
+  postLikes     PostLike[]
+  friendshipsA  Friendship[]         @relation("friendA")
+  friendshipsB  Friendship[]         @relation("friendB")
+}
+
+model EmailCode {
+  id         String      @id @default(uuid())
+  email      String
+  purpose    CodePurpose
+  codeHash   String
+  attempts   Int         @default(0)
+  expiresAt  DateTime
+  consumedAt DateTime?
+  createdAt  DateTime    @default(now())
+
+  @@index([email, purpose, createdAt])
+}
+
+model RefreshToken {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  revokedAt DateTime?
+  userAgent String?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+}
+
+/// Friendship is stored once per pair with userAId < userBId (lexicographic).
+model Friendship {
+  id             String       @id @default(uuid())
+  userAId        String
+  userBId        String
+  userA          User         @relation("friendA", fields: [userAId], references: [id], onDelete: Cascade)
+  userB          User         @relation("friendB", fields: [userBId], references: [id], onDelete: Cascade)
+  conversationId String       @unique
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now())
+
+  @@unique([userAId, userBId])
+}
+
+model MatchSession {
+  id        String      @id @default(uuid())
+  mode      MatchMode
+  userAId   String
+  userBId   String
+  status    MatchStatus @default(ACTIVE)
+  likedByA  Boolean     @default(false)
+  likedByB  Boolean     @default(false)
+  startedAt DateTime    @default(now())
+  endsAt    DateTime
+  endedAt   DateTime?
+  endReason String?
+
+  @@index([userAId])
+  @@index([userBId])
+}
+
+model Conversation {
+  id            String               @id @default(uuid())
+  createdAt     DateTime             @default(now())
+  lastMessageAt DateTime?
+  members       ConversationMember[]
+  messages      Message[]
+  friendship    Friendship?
+}
+
+model ConversationMember {
+  conversationId String
+  userId         String
+  lastReadAt     DateTime?
+  joinedAt       DateTime     @default(now())
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([conversationId, userId])
+  @@index([userId])
+}
+
+model Message {
+  id             String       @id @default(uuid())
+  conversationId String
+  senderId       String
+  type           MessageType  @default(TEXT)
+  body           String
+  clientId       String?
+  createdAt      DateTime     @default(now())
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt])
+}
+
+model Block {
+  blockerId String
+  blockedId String
+  createdAt DateTime @default(now())
+  blocker   User     @relation("blocker", fields: [blockerId], references: [id], onDelete: Cascade)
+  blocked   User     @relation("blocked", fields: [blockedId], references: [id], onDelete: Cascade)
+
+  @@id([blockerId, blockedId])
+}
+
+model Report {
+  id         String       @id @default(uuid())
+  reporterId String
+  targetId   String
+  reason     ReportReason
+  details    String?
+  context    String?
+  createdAt  DateTime     @default(now())
+  reporter   User         @relation("reporter", fields: [reporterId], references: [id], onDelete: Cascade)
+  target     User         @relation("target", fields: [targetId], references: [id], onDelete: Cascade)
+
+  @@index([targetId])
+}
+
+model Post {
+  id        String     @id @default(uuid())
+  authorId  String
+  body      String
+  createdAt DateTime   @default(now())
+  author    User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  likes     PostLike[]
+
+  @@index([createdAt])
+}
+
+model PostLike {
+  postId    String
+  userId    String
+  createdAt DateTime @default(now())
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([postId, userId])
+}

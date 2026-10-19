@@ -1,0 +1,47 @@
+# Local stack: Postgres + Redis + LiveKit (voice) + API.
+#   docker compose up -d --build      -> API on http://localhost:3000 (Swagger: /docs)
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: lumi
+      POSTGRES_PASSWORD: lumi
+      POSTGRES_DB: lumi
+    ports: ["5432:5432"]
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lumi"]
+      interval: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      retries: 10
+
+  livekit:
+    image: livekit/livekit-server:latest
+    command: --dev --bind 0.0.0.0 --node-ip 127.0.0.1
+    ports: ["7880:7880", "7881:7881", "7882:7882/udp"]
+
+  api:
+    build: ./backend
+    env_file: ./backend/.env.example
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://lumi:lumi@postgres:5432/lumi?schema=public
+      REDIS_URL: redis://redis:6379/0
+      # Clients connect to LiveKit directly; use a host/IP reachable from the phone.
+      LIVEKIT_URL: ${LIVEKIT_PUBLIC_URL:-ws://localhost:7880}
+      LIVEKIT_API_KEY: devkey
+      LIVEKIT_API_SECRET: secret
+    ports: ["3000:3000"]
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+
+volumes:
+  pgdata:
