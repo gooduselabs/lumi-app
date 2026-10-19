@@ -5,3 +5,5 @@ key.properties
 .DS_Store
 .idea/
 .vscode/
+dump.rdb
+.api-dev.log

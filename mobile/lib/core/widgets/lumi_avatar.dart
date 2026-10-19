@@ -82,11 +82,11 @@ class _BlobPainter extends CustomPainter {
     // background disc
     final rect = Rect.fromCircle(center: c, radius: s / 2);
     canvas.drawCircle(c, s / 2, Paint()..shader = LinearGradient(colors: bg, begin: Alignment.topLeft, end: Alignment.bottomRight).createShader(rect));
-    // soft glow
-    canvas.drawCircle(Offset(s * 0.3, s * 0.25), s * 0.28, Paint()..color = Colors.white.withValues(alpha: 0.12));
 
     canvas.save();
     canvas.clipPath(Path()..addOval(rect));
+    // soft highlight (clipped to the disc)
+    canvas.drawCircle(Offset(s * 0.3, s * 0.25), s * 0.28, Paint()..color = Colors.white.withValues(alpha: 0.12));
     final bodyPaint = Paint()..color = body;
 
     // ears / accessories
