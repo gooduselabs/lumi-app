@@ -1,0 +1,23 @@
+
+> lumi-api@1.0.0 smoke
+> ts-node scripts/smoke.ts
+
+Lumi smoke test -> http://localhost:3000
+✔ health {"status":"ok","db":"up","redis":"up","time":"2026-10-19T16:20:12.530Z"}
+✔ Linh: registered linh.1792426812540@smoke.lumi, code 931245 (also printed in API log)
+✔ Linh: verified + logged in
+✔ Linh: onboarded
+✔ Minh: registered minh.1792426812626@smoke.lumi, code 742112 (also printed in API log)
+✔ Minh: verified + logged in
+✔ Minh: onboarded
+✔ both sockets connected
+✔ Linh queued: waiting
+✔ matched! session 4ffb4ff0-184d-49d2-b123-f4e748c03882, 180s, common interests: coffee
+✔ anonymous message relayed: Chào bạn, mình thích cà phê ☕
+✔ mutual like -> friends with Minh, conversation c3fb9253-6a80-464b-a957-2e9ee283cb68
+✔ persistent chat delivered: Giờ mình là bạn rồi nhé!
+✔ read receipt delivered
+✔ history has 2 messages: TEXT:Giờ mình là bạn rồi nhé! | SYSTEM:MATCHED_SOUL
+✔ Minh friends: Linh
+
+SMOKE TEST PASSED
