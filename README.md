@@ -2,41 +2,41 @@
 
 # 💜 Lumi
 
-**Kết nối bằng tâm hồn trước, ngoại hình sau.**
+**Connect soul first, looks second.**
 
-Ứng dụng hẹn hò & kết bạn với Soul Match, Voice Match, chat mã hoá trên thiết bị và mini game cho các cặp đôi.
+A dating & friendship app with Soul Match, Voice Match, on-device encrypted chat, and mini games for couples.
 
-[**⬇️ Tải ứng dụng**](https://github.com/gooduselabs/lumi-download/releases)
+[**⬇️ Download the app**](https://github.com/gooduselabs/lumi-download/releases)
 
 </div>
 
 ---
 
-## ✨ Tính năng
+## ✨ Features
 
-- 🔮 **Soul Match** — ghép đôi theo tính cách & sở thích, trò chuyện ẩn danh trước khi lộ diện.
-- 🎙️ **Voice Match** — làm quen qua giọng nói, gọi thoại/video với bạn bè (LiveKit).
-- 🎯 **Bộ lọc độ tuổi & Gần đây** — tìm người phù hợp quanh bạn (vị trí được làm mờ để bảo vệ riêng tư).
-- 🖼️ **Chat đa phương tiện** — gửi ảnh, tin nhắn thoại, tệp tin.
-- 🔐 **Tin nhắn mã hoá trên thiết bị** — lịch sử lưu cục bộ bằng SQLCipher; server xoá tin sau khi đã giao.
-- 🎮 **Mini game cặp đôi** — Thật hay Thách · Ai hiểu ai hơn · Cờ Caro · Vẽ & Đoán.
+- 🔮 **Soul Match** — get matched by personality and interests, and chat anonymously before revealing yourself.
+- 🎙️ **Voice Match** — meet people through their voice, plus voice/video calls with friends (LiveKit).
+- 🎯 **Age & Nearby filters** — find compatible people around you (location is coarsened to protect your privacy).
+- 🖼️ **Media chat** — send photos, voice messages, and files.
+- 🔐 **On-device encrypted messages** — history is stored locally with SQLCipher; the server deletes messages once delivered.
+- 🎮 **Couple mini games** — Truth or Dare · Who Knows Whom Better · Caro (Gomoku) · Draw & Guess.
 
-## 📸 Ảnh chụp màn hình
+## 📸 Screenshots
 
-| Khám phá & ghép đôi | Bộ lọc, chat & gọi | Mini game |
+| Discover & Match | Filters, Chat & Calls | Mini Games |
 |:---:|:---:|:---:|
 | ![v1](docs/screenshots/v1-collage.png) | ![v2](docs/screenshots/v2-collage.png) | ![v3](docs/screenshots/v3-collage.png) |
 
-## 🛠️ Công nghệ
+## 🛠️ Tech Stack
 
-| Thành phần | Công nghệ |
+| Layer | Technology |
 |---|---|
 | Mobile | Flutter |
 | Backend | NestJS · Prisma · PostgreSQL · Redis |
 | Realtime | Socket.IO |
-| Gọi thoại/video | LiveKit |
+| Voice/Video calls | LiveKit |
 
-## 🚀 Chạy thử (dev)
+## 🚀 Quick Start (dev)
 
 ```bash
 docker compose up -d          # Postgres, Redis, LiveKit (dev keys)
@@ -44,6 +44,6 @@ cd backend && cp .env.example .env && npm i && npx prisma migrate dev && npm run
 cd ../mobile && flutter run
 ```
 
-## 📥 Tải về
+## 📥 Download
 
-Bản APK mới nhất: **https://github.com/gooduselabs/lumi-download/releases**
+Latest APK: **https://github.com/gooduselabs/lumi-download/releases**
