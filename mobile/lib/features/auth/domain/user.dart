@@ -12,8 +12,16 @@ class Me {
     this.bio,
     this.interests = const [],
     this.locale = 'vi',
+    this.agePrefMin = 18,
+    this.agePrefMax = 99,
+    this.hasLocation = false,
+    this.locationHidden = false,
   });
 
+  final int agePrefMin;
+  final int agePrefMax;
+  final bool hasLocation;
+  final bool locationHidden;
   final String id;
   final String email;
   final bool onboarded;
@@ -38,6 +46,10 @@ class Me {
         bio: j['bio'] as String?,
         interests: (j['interests'] as List? ?? const []).cast<String>(),
         locale: (j['locale'] as String?) ?? 'vi',
+        agePrefMin: (j['agePrefMin'] as num?)?.toInt() ?? 18,
+        agePrefMax: (j['agePrefMax'] as num?)?.toInt() ?? 99,
+        hasLocation: j['hasLocation'] == true,
+        locationHidden: j['locationHidden'] == true,
       );
 }
 
@@ -53,7 +65,11 @@ class PublicUser {
     this.interests = const [],
     this.online = false,
     this.lastSeenAt,
+    this.distanceKm,
   });
+
+  /// Approximate distance (server-rounded, Nearby list only).
+  final int? distanceKm;
 
   final String id;
   final String nickname;
@@ -67,7 +83,7 @@ class PublicUser {
 
   PublicUser copyWith({bool? online}) => PublicUser(
         id: id, nickname: nickname, avatarId: avatarId, gender: gender, age: age, bio: bio,
-        interests: interests, online: online ?? this.online, lastSeenAt: lastSeenAt,
+        interests: interests, online: online ?? this.online, lastSeenAt: lastSeenAt, distanceKm: distanceKm,
       );
 
   factory PublicUser.fromJson(Map<String, dynamic> j) => PublicUser(
@@ -80,6 +96,7 @@ class PublicUser {
         interests: (j['interests'] as List? ?? const []).cast<String>(),
         online: j['online'] == true,
         lastSeenAt: j['lastSeenAt'] != null ? DateTime.tryParse(j['lastSeenAt'] as String) : null,
+        distanceKm: (j['distanceKm'] as num?)?.toInt(),
       );
 }
 

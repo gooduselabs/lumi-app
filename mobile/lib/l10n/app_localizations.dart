@@ -1303,6 +1303,300 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Học tập'**
   String get interest_study;
+
+  /// No description provided for @filters.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bộ lọc'**
+  String get filters;
+
+  /// No description provided for @ageRange.
+  ///
+  /// In vi, this message translates to:
+  /// **'Độ tuổi'**
+  String get ageRange;
+
+  /// No description provided for @ageRangeValue.
+  ///
+  /// In vi, this message translates to:
+  /// **'{min} – {max} tuổi'**
+  String ageRangeValue(int min, int max);
+
+  /// No description provided for @ageRangeHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chỉ ghép với người trong độ tuổi này và cũng chấp nhận tuổi của bạn.'**
+  String get ageRangeHint;
+
+  /// No description provided for @genderFilter.
+  ///
+  /// In vi, this message translates to:
+  /// **'Giới tính'**
+  String get genderFilter;
+
+  /// No description provided for @preferNearby.
+  ///
+  /// In vi, this message translates to:
+  /// **'Ưu tiên người gần đây'**
+  String get preferNearby;
+
+  /// No description provided for @preferNearbyDesc.
+  ///
+  /// In vi, this message translates to:
+  /// **'Ghép với người trong bán kính ~30 km khi có thể'**
+  String get preferNearbyDesc;
+
+  /// No description provided for @nearbyTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Người gần đây'**
+  String get nearbyTitle;
+
+  /// No description provided for @nearbyDesc.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xem ai đang ở quanh bạn'**
+  String get nearbyDesc;
+
+  /// No description provided for @distanceApprox.
+  ///
+  /// In vi, this message translates to:
+  /// **'~{km} km'**
+  String distanceApprox(int km);
+
+  /// No description provided for @radius.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bán kính'**
+  String get radius;
+
+  /// No description provided for @radiusKm.
+  ///
+  /// In vi, this message translates to:
+  /// **'{km} km'**
+  String radiusKm(int km);
+
+  /// No description provided for @locationEnable.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bật vị trí'**
+  String get locationEnable;
+
+  /// No description provided for @locationWhy.
+  ///
+  /// In vi, this message translates to:
+  /// **'Lumi chỉ lưu vị trí gần đúng (~1 km). Người khác chỉ thấy khoảng cách ước lượng, không bao giờ thấy toạ độ của bạn.'**
+  String get locationWhy;
+
+  /// No description provided for @locationDenied.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bạn đã từ chối quyền vị trí.'**
+  String get locationDenied;
+
+  /// No description provided for @locationDeniedForever.
+  ///
+  /// In vi, this message translates to:
+  /// **'Quyền vị trí bị tắt. Hãy bật trong Cài đặt.'**
+  String get locationDeniedForever;
+
+  /// No description provided for @locationServiceOff.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dịch vụ định vị đang tắt.'**
+  String get locationServiceOff;
+
+  /// No description provided for @openSettings.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mở Cài đặt'**
+  String get openSettings;
+
+  /// No description provided for @hideLocation.
+  ///
+  /// In vi, this message translates to:
+  /// **'Ẩn vị trí của tôi'**
+  String get hideLocation;
+
+  /// No description provided for @hideLocationDesc.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không xuất hiện trong Người gần đây và ghép theo khoảng cách'**
+  String get hideLocationDesc;
+
+  /// No description provided for @locationHiddenInfo.
+  ///
+  /// In vi, this message translates to:
+  /// **'Vị trí của bạn đang ẩn. Bật lại để xem người gần đây.'**
+  String get locationHiddenInfo;
+
+  /// No description provided for @removeLocation.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xoá vị trí đã lưu'**
+  String get removeLocation;
+
+  /// No description provided for @updateLocation.
+  ///
+  /// In vi, this message translates to:
+  /// **'Cập nhật vị trí'**
+  String get updateLocation;
+
+  /// No description provided for @nearbyEmpty.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chưa có ai trong bán kính này. Thử mở rộng bán kính nhé!'**
+  String get nearbyEmpty;
+
+  /// No description provided for @attachPhoto.
+  ///
+  /// In vi, this message translates to:
+  /// **'Ảnh'**
+  String get attachPhoto;
+
+  /// No description provided for @attachCamera.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chụp ảnh'**
+  String get attachCamera;
+
+  /// No description provided for @attachFile.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tệp'**
+  String get attachFile;
+
+  /// No description provided for @holdToRecord.
+  ///
+  /// In vi, this message translates to:
+  /// **'Giữ để ghi âm'**
+  String get holdToRecord;
+
+  /// No description provided for @releaseToSend.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thả để gửi · vuốt sang trái để huỷ'**
+  String get releaseToSend;
+
+  /// No description provided for @recordTooShort.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tin nhắn thoại quá ngắn'**
+  String get recordTooShort;
+
+  /// No description provided for @voiceMessage.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tin nhắn thoại'**
+  String get voiceMessage;
+
+  /// No description provided for @photoMessage.
+  ///
+  /// In vi, this message translates to:
+  /// **'Ảnh'**
+  String get photoMessage;
+
+  /// No description provided for @fileTooLarge.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tệp vượt quá {mb} MB'**
+  String fileTooLarge(int mb);
+
+  /// No description provided for @fileTypeNotAllowed.
+  ///
+  /// In vi, this message translates to:
+  /// **'Loại tệp này không được hỗ trợ'**
+  String get fileTypeNotAllowed;
+
+  /// No description provided for @uploading.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đang tải lên…'**
+  String get uploading;
+
+  /// No description provided for @download.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tải xuống'**
+  String get download;
+
+  /// No description provided for @callVoice.
+  ///
+  /// In vi, this message translates to:
+  /// **'Gọi thoại'**
+  String get callVoice;
+
+  /// No description provided for @calling.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đang gọi…'**
+  String get calling;
+
+  /// No description provided for @incomingCall.
+  ///
+  /// In vi, this message translates to:
+  /// **'Cuộc gọi đến'**
+  String get incomingCall;
+
+  /// No description provided for @incomingCallFrom.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name} đang gọi cho bạn'**
+  String incomingCallFrom(String name);
+
+  /// No description provided for @accept.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nghe'**
+  String get accept;
+
+  /// No description provided for @decline.
+  ///
+  /// In vi, this message translates to:
+  /// **'Từ chối'**
+  String get decline;
+
+  /// No description provided for @hangUp.
+  ///
+  /// In vi, this message translates to:
+  /// **'Kết thúc'**
+  String get hangUp;
+
+  /// No description provided for @callEnded.
+  ///
+  /// In vi, this message translates to:
+  /// **'Cuộc gọi đã kết thúc'**
+  String get callEnded;
+
+  /// No description provided for @callDeclined.
+  ///
+  /// In vi, this message translates to:
+  /// **'Cuộc gọi bị từ chối'**
+  String get callDeclined;
+
+  /// No description provided for @callNoAnswer.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không có người nghe máy'**
+  String get callNoAnswer;
+
+  /// No description provided for @peerBusy.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bạn bè đang trong cuộc gọi khác'**
+  String get peerBusy;
+
+  /// No description provided for @speaker.
+  ///
+  /// In vi, this message translates to:
+  /// **'Loa ngoài'**
+  String get speaker;
+
+  /// No description provided for @errInvalidAgeRange.
+  ///
+  /// In vi, this message translates to:
+  /// **'Độ tuổi không hợp lệ'**
+  String get errInvalidAgeRange;
 }
 
 class _AppLocalizationsDelegate

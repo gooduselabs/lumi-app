@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/l10n_ext.dart';
@@ -17,6 +18,7 @@ import '../application/chat_controller.dart';
 import '../application/conversations_controller.dart';
 import '../data/chat_repository.dart';
 import '../domain/chat_models.dart';
+import 'media_widgets.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
   const ChatScreen({super.key, required this.conversationId});
@@ -49,6 +51,43 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     _input.dispose();
     _scroll.dispose();
     super.dispose();
+  }
+
+  bool _recording = false;
+  Duration _recElapsed = Duration.zero;
+  bool _recCancel = false;
+
+  ChatController get _ctrl => ref.read(chatControllerProvider(widget.conversationId).notifier);
+
+  Future<void> _attach() async {
+    final l = context.l10n;
+    final choice = await showModalBottomSheet<String>(
+      context: context,
+      builder: (ctx) => SafeArea(
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          ListTile(leading: const Icon(Icons.photo_library_rounded), title: Text(l.attachPhoto), onTap: () => Navigator.pop(ctx, 'gallery')),
+          ListTile(leading: const Icon(Icons.photo_camera_rounded), title: Text(l.attachCamera), onTap: () => Navigator.pop(ctx, 'camera')),
+          ListTile(leading: const Icon(Icons.attach_file_rounded), title: Text(l.attachFile), onTap: () => Navigator.pop(ctx, 'file')),
+        ]),
+      ),
+    );
+    if (choice == null) return;
+    try {
+      final media = switch (choice) {
+        'gallery' => await pickImage(ImageSource.gallery),
+        'camera' => await pickImage(ImageSource.camera),
+        _ => await pickDocument(),
+      };
+      if (media != null) await _ctrl.sendMedia(media);
+    } on FileTooLarge {
+      if (mounted) showSnack(context, l.fileTooLarge(20), error: true);
+    } catch (e) {
+      if (mounted) showSnack(context, l.errorText(e), error: true);
+    }
+  }
+
+  Future<void> _call() async {
+    context.push('/call?conversation=${widget.conversationId}');
   }
 
   void _send() {
@@ -132,6 +171,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 ]),
               ),
         actions: [
+          if (!state.blocked && peer != null)
+            IconButton(key: const Key('callButton'), tooltip: l.callVoice, onPressed: _call, icon: const Icon(Icons.call_rounded)),
           PopupMenuButton<String>(
             onSelected: _menu,
             itemBuilder: (_) => [
@@ -170,7 +211,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                               m: m,
                               mine: m.senderId == meId,
                               seen: m.id == seenId,
-                              onRetry: () => ref.read(chatControllerProvider(widget.conversationId).notifier).send(m.body, retry: m),
+                              onRetry: () => _ctrl.retry(m),
                             ),
                         ]);
                       },
@@ -196,22 +237,56 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
                         child: Row(children: [
-                          Expanded(
-                            child: TextField(
-                              controller: _input,
-                              minLines: 1,
-                              maxLines: 5,
-                              maxLength: 2000,
-                              textCapitalization: TextCapitalization.sentences,
-                              onChanged: ref.read(chatControllerProvider(widget.conversationId).notifier).onInputChanged,
-                              decoration: InputDecoration(hintText: l.typeMessage, counterText: '', isDense: true),
+                          if (_recording)
+                            Expanded(
+                              child: Container(
+                                height: 50,
+                                padding: const EdgeInsets.symmetric(horizontal: 14),
+                                decoration: BoxDecoration(color: AppColors.surfaceHigh, borderRadius: BorderRadius.circular(25)),
+                                child: Row(children: [
+                                  Icon(Icons.fiber_manual_record_rounded, color: _recCancel ? AppColors.textFaint : AppColors.danger, size: 14),
+                                  const SizedBox(width: 8),
+                                  Text(formatDuration(_recElapsed), style: const TextStyle(fontWeight: FontWeight.w700)),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Text(l.releaseToSend,
+                                        overflow: TextOverflow.ellipsis, style: const TextStyle(color: AppColors.textMuted, fontSize: 12)),
+                                  ),
+                                ]),
+                              ),
+                            )
+                          else ...[
+                            IconButton(key: const Key('attachButton'), onPressed: _attach, icon: const Icon(Icons.add_circle_outline_rounded)),
+                            Expanded(
+                              child: TextField(
+                                controller: _input,
+                                minLines: 1,
+                                maxLines: 5,
+                                maxLength: 2000,
+                                textCapitalization: TextCapitalization.sentences,
+                                onChanged: _ctrl.onInputChanged,
+                                decoration: InputDecoration(hintText: l.typeMessage, counterText: '', isDense: true),
+                              ),
                             ),
-                          ),
+                          ],
                           const SizedBox(width: 8),
-                          IconButton.filled(
-                            style: IconButton.styleFrom(backgroundColor: AppColors.violet, fixedSize: const Size(50, 50)),
-                            onPressed: _send,
-                            icon: const Icon(Icons.send_rounded),
+                          ValueListenableBuilder(
+                            valueListenable: _input,
+                            builder: (_, v, _) => v.text.trim().isNotEmpty
+                                ? IconButton.filled(
+                                    style: IconButton.styleFrom(backgroundColor: AppColors.violet, fixedSize: const Size(50, 50)),
+                                    onPressed: _send,
+                                    icon: const Icon(Icons.send_rounded),
+                                  )
+                                : HoldToRecordButton(
+                                    onRecorded: _ctrl.sendMedia,
+                                    onError: (t) => showSnack(context, t),
+                                    onRecordingChanged: (r, e, c) => setState(() {
+                                      _recording = r;
+                                      _recElapsed = e;
+                                      _recCancel = c;
+                                    }),
+                                  ),
                           ),
                         ]),
                       ),
@@ -272,7 +347,7 @@ class _MessageBubble extends StatelessWidget {
           Container(
             margin: const EdgeInsets.symmetric(vertical: 2),
             constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.75),
-            padding: const EdgeInsets.fromLTRB(14, 10, 14, 8),
+            padding: m.type == 'IMAGE' ? const EdgeInsets.fromLTRB(5, 5, 5, 6) : const EdgeInsets.fromLTRB(14, 10, 14, 8),
             decoration: BoxDecoration(
               gradient: mine && !failed ? AppColors.primaryGradient : null,
               color: failed ? AppColors.danger.withValues(alpha: 0.25) : (mine ? null : AppColors.surfaceHigh),
@@ -284,7 +359,11 @@ class _MessageBubble extends StatelessWidget {
               ),
             ),
             child: Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-              Text(m.body, style: const TextStyle(fontSize: 15, height: 1.3)),
+              if (m.isMedia) ...[
+                MediaContent(m: m, mine: mine),
+                if (m.body.isNotEmpty) ...[const SizedBox(height: 6), Text(m.body, style: const TextStyle(fontSize: 15, height: 1.3))],
+              ] else
+                Text(m.body, style: const TextStyle(fontSize: 15, height: 1.3)),
               const SizedBox(height: 2),
               Text(formatClock(m.createdAt), style: TextStyle(fontSize: 10.5, color: Colors.white.withValues(alpha: 0.6))),
             ]),

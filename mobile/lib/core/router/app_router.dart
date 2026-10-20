@@ -8,6 +8,7 @@ import '../../features/auth/presentation/login_screen.dart';
 import '../../features/auth/presentation/register_screen.dart';
 import '../../features/auth/presentation/verify_screen.dart';
 import '../../features/auth/presentation/welcome_screen.dart';
+import '../../features/call/presentation/call_screen.dart';
 import '../../features/chat/presentation/chat_screen.dart';
 import '../../features/chat/presentation/chats_screen.dart';
 import '../../features/feed/presentation/feed_screen.dart';
@@ -16,6 +17,7 @@ import '../../features/home/presentation/splash_screen.dart';
 import '../../features/match/domain/match_models.dart';
 import '../../features/match/presentation/discover_screen.dart';
 import '../../features/match/presentation/match_screen.dart';
+import '../../features/nearby/presentation/nearby_screen.dart';
 import '../../features/onboarding/presentation/onboarding_screen.dart';
 import '../../features/profile/presentation/edit_profile_screen.dart';
 import '../../features/profile/presentation/me_screen.dart';
@@ -80,6 +82,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         ),
       ),
       GoRoute(path: '/chat/:id', builder: (_, s) => ChatScreen(conversationId: s.pathParameters['id']!)),
+      GoRoute(path: '/call', builder: (_, s) => CallScreen(conversationId: s.uri.queryParameters['conversation'])),
+      GoRoute(path: '/nearby', builder: (_, _) => const NearbyScreen()),
       GoRoute(path: '/me/edit', builder: (_, _) => const EditProfileScreen()),
       GoRoute(path: '/settings', builder: (_, _) => const SettingsScreen()),
       GoRoute(path: '/settings/blocked', builder: (_, _) => const BlockedUsersScreen()),

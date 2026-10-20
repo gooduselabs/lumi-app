@@ -10,7 +10,8 @@ import { REDIS } from '../redis/redis.module';
 import { SocialService } from '../social/social.service';
 import { publicSelect, toPublic } from '../users/user.mapper';
 import { LivekitService } from '../voice/livekit.service';
-import { commonInterests, compatible, GenderPref, QueueEntry } from './match.logic';
+import { ageOn } from '../common/age';
+import { commonInterests, GenderPref, pickPartner, QueueEntry } from './match.logic';
 
 const K = {
   queue: (mode: MatchMode) => `mq:${mode}`,
@@ -60,7 +61,7 @@ export class MatchService implements OnModuleInit, OnModuleDestroy {
 
   // ---------------- queue ----------------
 
-  async join(userId: string, mode: MatchMode, pref: GenderPref = 'ANY') {
+  async join(userId: string, mode: MatchMode, pref: GenderPref = 'ANY', opts: { preferNearby?: boolean } = {}) {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) throw Errors.unauthorized();
     if (!user.onboardedAt) throw Errors.notOnboarded();
@@ -70,10 +71,24 @@ export class MatchService implements OnModuleInit, OnModuleDestroy {
     await this.leave(userId);
     const blocked = await this.social.blockedIds(userId);
     const recent = await this.redis.get(K.recent(userId));
-    const me: QueueEntry = { userId, mode, gender: user.gender, pref, at: Date.now() };
+    const loc =
+      !user.locationHidden && user.latCoarse != null && user.lngCoarse != null ? { lat: user.latCoarse, lng: user.lngCoarse } : null;
+    const me: QueueEntry = {
+      userId,
+      mode,
+      gender: user.gender,
+      pref,
+      at: Date.now(),
+      age: user.birthday ? ageOn(user.birthday) : null,
+      ageMin: user.agePrefMin,
+      ageMax: user.agePrefMax,
+      loc,
+      preferNearby: !!opts.preferNearby && !!loc,
+    };
 
     const partnerId = await this.withLock(mode, async () => {
       const candidates = await this.redis.lrange(K.queue(mode), 0, 199);
+      const live: QueueEntry[] = [];
       for (const c of candidates) {
         if (c === userId || blocked.has(c) || c === recent) continue;
         const raw = await this.redis.get(K.entry(c));
@@ -83,9 +98,12 @@ export class MatchService implements OnModuleInit, OnModuleDestroy {
           if (entry && !this.rt.isOnline(c)) await this.redis.del(K.entry(c));
           continue;
         }
-        if (!compatible(me, entry)) continue;
-        await this.redis.multi().lrem(K.queue(mode), 0, c).del(K.entry(c)).exec();
-        return c;
+        live.push(entry);
+      }
+      const chosen = pickPartner(me, live);
+      if (chosen) {
+        await this.redis.multi().lrem(K.queue(mode), 0, chosen.userId).del(K.entry(chosen.userId)).exec();
+        return chosen.userId;
       }
       await this.redis.multi().rpush(K.queue(mode), userId).set(K.entry(userId), JSON.stringify(me), 'EX', 600).exec();
       return null;

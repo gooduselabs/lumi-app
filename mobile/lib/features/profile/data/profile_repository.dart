@@ -32,6 +32,20 @@ class ProfileRepository {
 
   Future<Me> update(Map<String, dynamic> patch) async => Me.fromJson(await _api.patch('/me', data: patch));
 
+  /// Sends the GPS fix once; the server keeps only a ~1 km grid cell.
+  Future<Me> setLocation(double lat, double lng) async => Me.fromJson(await _api.put('/me/location', data: {'lat': lat, 'lng': lng}));
+  Future<Me> clearLocation() async => Me.fromJson(await _api.delete('/me/location'));
+
+  Future<List<PublicUser>> nearby({int radiusKm = 25, int? minAge, int? maxAge, String gender = 'ANY'}) async =>
+      (await _api.get<List>('/nearby', query: {
+        'radiusKm': radiusKm,
+        'minAge': ?minAge,
+        'maxAge': ?maxAge,
+        if (gender != 'ANY') 'gender': gender,
+      }))
+          .map((e) => PublicUser.fromJson(Map<String, dynamic>.from(e as Map)))
+          .toList();
+
   Future<PublicUser> user(String id) async => PublicUser.fromJson(await _api.get('/users/$id'));
 
   Future<List<PublicUser>> blocks() async =>

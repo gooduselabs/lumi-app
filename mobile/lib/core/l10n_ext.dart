@@ -24,6 +24,12 @@ extension AppLocalizationsX on AppLocalizations {
       'SESSION_CLOSED' => errSessionClosed,
       'BLOCKED' => errBlocked,
       'VOICE_UNAVAILABLE' => voiceUnavailable,
+      'FILE_TOO_LARGE' => fileTooLarge(20),
+      'UNSUPPORTED_FILE_TYPE' => fileTypeNotAllowed,
+      'PEER_BUSY' => peerBusy,
+      'INVALID_AGE_RANGE' => errInvalidAgeRange,
+      'LOCATION_HIDDEN' => locationHiddenInfo,
+      'LOCATION_REQUIRED' => locationWhy,
       'VALIDATION' => error.message,
       _ => error.message.isNotEmpty ? error.message : somethingWrong,
     };

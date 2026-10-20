@@ -7,3 +7,4 @@ key.properties
 .vscode/
 dump.rdb
 .api-dev.log
+.livekit-dev.log

@@ -42,7 +42,10 @@ flowchart LR
 | Báo cáo / chặn (cả trong phiên ẩn danh) | ✅ |
 | Cài đặt: ngôn ngữ vi/en, người đã chặn, đăng xuất, xoá tài khoản | ✅ |
 | Bảng tin + thả tim | ✅ |
-| Voice Match (LiveKit) | ⚠️ đã code, cần một LiveKit server (có trong docker-compose) |
+| Bộ lọc độ tuổi (mặc định 18–99), áp dụng 2 chiều cho Soul/Voice Match và Người gần đây | ✅ v1.1 |
+| Người gần đây: GPS tuỳ chọn, lưu vị trí làm tròn ~1 km (+geohash), chỉ hiện khoảng cách xấp xỉ “~3 km”, lọc bán kính/tuổi/giới tính, ẩn vị trí, “ưu tiên người gần đây” khi ghép | ✅ v1.1 |
+| Chat đa phương tiện: ảnh (nén 1600px/q80), tin nhắn thoại giữ‑để‑ghi + phát lại, tệp đính kèm (≤20 MB, allowlist) | ✅ v1.1 |
+| Gọi thoại thật qua LiveKit: Voice Match + gọi 1‑1 với bạn bè (đổ chuông, nghe/từ chối, tắt mic, loa ngoài) | ✅ v1.1 (cần LiveKit server, xem bên dưới) |
 | Push FCM | ⚠️ stub (ghi log khi người nhận offline) |
 
 ## Chạy backend
@@ -75,7 +78,38 @@ npm run smoke                   # kịch bản E2E: 2 user đăng ký → match 
 npm test
 ```
 
-Kết quả: auth, matching, chat e2e cùng unit test, 22/22 pass.
+Kết quả: auth, matching, chat, tuổi/vị trí/media/gọi thoại e2e cùng unit test, 48/48 pass (kèm test LiveKit sống khi có `LIVEKIT_TEST_URL`).
+
+### LiveKit (gọi thoại)
+
+Backend chỉ ký token (`livekit-server-sdk`); âm thanh đi qua LiveKit server. Khi thiếu biến môi trường, API trả `503 VOICE_UNAVAILABLE` và app hiện “Voice Match chưa được bật trên máy chủ”.
+
+```bash
+# Dev: tải binary https://github.com/livekit/livekit/releases rồi
+livekit-server --dev --bind 0.0.0.0        # key=devkey secret=secret, ws://<host>:7880
+# backend/.env
+LIVEKIT_URL=ws://<IP-LAN-hoặc-domain>:7880   # URL mà ĐIỆN THOẠI kết nối được
+LIVEKIT_API_KEY=devkey
+LIVEKIT_API_SECRET=secret
+```
+
+Production: dùng LiveKit Cloud (`wss://<project>.livekit.cloud`) hoặc tự host (`livekit-server --config livekit.yaml`, mở TCP 7880/7881 + UDP 50000‑60000, TLS qua reverse proxy, key/secret mạnh). Test sống với server thật: `LIVEKIT_TEST_URL=ws://localhost:7880 npm test` (CI chạy sẵn `livekit-server --dev`).
+
+### Lưu trữ tệp chat
+
+`STORAGE_DRIVER=local` (mặc định) ghi vào `backend/uploads/` (đã gitignore). `STORAGE_DRIVER=s3` dùng mọi dịch vụ tương thích S3 (AWS S3, Cloudflare R2, MinIO, B2…): `S3_BUCKET`, `S3_REGION`, `S3_ENDPOINT`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_FORCE_PATH_STYLE`. Giới hạn `MAX_UPLOAD_MB=20`.
+Tải xuống `GET /attachments/:id` cần Bearer token của thành viên cuộc trò chuyện, hoặc URL ký HMAC ngắn hạn (`?exp&sig`, do API trả về trong mỗi tin nhắn) để widget ảnh/âm thanh tải được mà không cần header. Ảnh được kiểm tra magic bytes; tệp phải nằm trong allowlist MIME + đuôi; tên tệp được làm sạch.
+
+### API mới (v1.1)
+
+| | |
+|---|---|
+| `PATCH /me {agePrefMin, agePrefMax, locationHidden}` | tuỳ chọn ghép |
+| `PUT /me/location {lat,lng}` · `DELETE /me/location` | lưu vị trí đã làm tròn ~1 km (toạ độ gốc bị bỏ ngay) |
+| `GET /nearby?radiusKm&minAge&maxAge&gender` | người gần đây, trả `distanceKm` xấp xỉ, không bao giờ trả toạ độ |
+| `POST /conversations/:id/media` (multipart `file`, `kind`=IMAGE/VOICE/FILE, `durationMs`, `width`, `height`, `caption`, `clientId`) | gửi tin nhắn media |
+| `GET /attachments/:id` | tải tệp (Bearer hoặc URL ký) |
+| `POST /calls {conversationId}` · `/calls/:id/accept` · `/decline` · `/end` | gọi 1‑1 với bạn bè, trả token LiveKit |
 
 ## Chạy app
 
@@ -99,6 +133,7 @@ Xác thực qua `auth: { token: <accessToken> }`. Ack trả về `{ok, data}` ho
 | `match:join {mode}` · `match:leave` · `match:like` · `match:skip` | `match:found` · `match:liked` · `match:mutual` · `match:ended` |
 | `soul:message` · `soul:typing` | `soul:message` · `soul:typing` |
 | `chat:send` · `chat:typing` · `chat:read` | `chat:message` · `chat:typing` · `chat:read` · `presence:update` · `friends:changed` |
+| `match:join {mode, gender, preferNearby}` | `call:incoming` · `call:accepted` · `call:ended` |
 
 ## Cấu trúc
 

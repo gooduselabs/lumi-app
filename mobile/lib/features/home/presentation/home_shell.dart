@@ -8,6 +8,7 @@ import '../../../core/l10n_ext.dart';
 import '../../../core/providers.dart';
 import '../../../core/realtime/socket_service.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../call/application/call_controller.dart';
 import '../../chat/application/conversations_controller.dart';
 
 class HomeShell extends ConsumerWidget {
@@ -19,6 +20,10 @@ class HomeShell extends ConsumerWidget {
     final l = context.l10n;
     final unread = ref.watch(totalUnreadProvider);
     final socket = ref.watch(socketServiceProvider);
+    // Incoming friend call -> full-screen call UI.
+    ref.listen(callControllerProvider.select((c) => c.phase), (prev, next) {
+      if (next == CallPhase.incoming && prev != CallPhase.incoming) context.push('/call');
+    });
     final items = [
       (Icons.explore_outlined, Icons.explore_rounded, l.tabDiscover),
       (Icons.dynamic_feed_outlined, Icons.dynamic_feed_rounded, l.tabFeed),

@@ -294,5 +294,92 @@
   "interest_astrology": "Chiêm tinh",
   "interest_dance": "Nhảy",
   "interest_nature": "Thiên nhiên",
-  "interest_study": "Học tập"
+  "interest_study": "Học tập",
+  "filters": "Bộ lọc",
+  "ageRange": "Độ tuổi",
+  "ageRangeValue": "{min} – {max} tuổi",
+  "@ageRangeValue": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "ageRangeHint": "Chỉ ghép với người trong độ tuổi này và cũng chấp nhận tuổi của bạn.",
+  "genderFilter": "Giới tính",
+  "preferNearby": "Ưu tiên người gần đây",
+  "preferNearbyDesc": "Ghép với người trong bán kính ~30 km khi có thể",
+  "nearbyTitle": "Người gần đây",
+  "nearbyDesc": "Xem ai đang ở quanh bạn",
+  "distanceApprox": "~{km} km",
+  "@distanceApprox": {
+    "placeholders": {
+      "km": {
+        "type": "int"
+      }
+    }
+  },
+  "radius": "Bán kính",
+  "radiusKm": "{km} km",
+  "@radiusKm": {
+    "placeholders": {
+      "km": {
+        "type": "int"
+      }
+    }
+  },
+  "locationEnable": "Bật vị trí",
+  "locationWhy": "Lumi chỉ lưu vị trí gần đúng (~1 km). Người khác chỉ thấy khoảng cách ước lượng, không bao giờ thấy toạ độ của bạn.",
+  "locationDenied": "Bạn đã từ chối quyền vị trí.",
+  "locationDeniedForever": "Quyền vị trí bị tắt. Hãy bật trong Cài đặt.",
+  "locationServiceOff": "Dịch vụ định vị đang tắt.",
+  "openSettings": "Mở Cài đặt",
+  "hideLocation": "Ẩn vị trí của tôi",
+  "hideLocationDesc": "Không xuất hiện trong Người gần đây và ghép theo khoảng cách",
+  "locationHiddenInfo": "Vị trí của bạn đang ẩn. Bật lại để xem người gần đây.",
+  "removeLocation": "Xoá vị trí đã lưu",
+  "updateLocation": "Cập nhật vị trí",
+  "nearbyEmpty": "Chưa có ai trong bán kính này. Thử mở rộng bán kính nhé!",
+  "attachPhoto": "Ảnh",
+  "attachCamera": "Chụp ảnh",
+  "attachFile": "Tệp",
+  "holdToRecord": "Giữ để ghi âm",
+  "releaseToSend": "Thả để gửi · vuốt sang trái để huỷ",
+  "recordTooShort": "Tin nhắn thoại quá ngắn",
+  "voiceMessage": "Tin nhắn thoại",
+  "photoMessage": "Ảnh",
+  "fileTooLarge": "Tệp vượt quá {mb} MB",
+  "@fileTooLarge": {
+    "placeholders": {
+      "mb": {
+        "type": "int"
+      }
+    }
+  },
+  "fileTypeNotAllowed": "Loại tệp này không được hỗ trợ",
+  "uploading": "Đang tải lên…",
+  "download": "Tải xuống",
+  "callVoice": "Gọi thoại",
+  "calling": "Đang gọi…",
+  "incomingCall": "Cuộc gọi đến",
+  "incomingCallFrom": "{name} đang gọi cho bạn",
+  "@incomingCallFrom": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "accept": "Nghe",
+  "decline": "Từ chối",
+  "hangUp": "Kết thúc",
+  "callEnded": "Cuộc gọi đã kết thúc",
+  "callDeclined": "Cuộc gọi bị từ chối",
+  "callNoAnswer": "Không có người nghe máy",
+  "peerBusy": "Bạn bè đang trong cuộc gọi khác",
+  "speaker": "Loa ngoài",
+  "errInvalidAgeRange": "Độ tuổi không hợp lệ"
 }

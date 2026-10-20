@@ -652,4 +652,168 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get interest_study => 'Học tập';
+
+  @override
+  String get filters => 'Bộ lọc';
+
+  @override
+  String get ageRange => 'Độ tuổi';
+
+  @override
+  String ageRangeValue(int min, int max) {
+    return '$min – $max tuổi';
+  }
+
+  @override
+  String get ageRangeHint =>
+      'Chỉ ghép với người trong độ tuổi này và cũng chấp nhận tuổi của bạn.';
+
+  @override
+  String get genderFilter => 'Giới tính';
+
+  @override
+  String get preferNearby => 'Ưu tiên người gần đây';
+
+  @override
+  String get preferNearbyDesc =>
+      'Ghép với người trong bán kính ~30 km khi có thể';
+
+  @override
+  String get nearbyTitle => 'Người gần đây';
+
+  @override
+  String get nearbyDesc => 'Xem ai đang ở quanh bạn';
+
+  @override
+  String distanceApprox(int km) {
+    return '~$km km';
+  }
+
+  @override
+  String get radius => 'Bán kính';
+
+  @override
+  String radiusKm(int km) {
+    return '$km km';
+  }
+
+  @override
+  String get locationEnable => 'Bật vị trí';
+
+  @override
+  String get locationWhy =>
+      'Lumi chỉ lưu vị trí gần đúng (~1 km). Người khác chỉ thấy khoảng cách ước lượng, không bao giờ thấy toạ độ của bạn.';
+
+  @override
+  String get locationDenied => 'Bạn đã từ chối quyền vị trí.';
+
+  @override
+  String get locationDeniedForever =>
+      'Quyền vị trí bị tắt. Hãy bật trong Cài đặt.';
+
+  @override
+  String get locationServiceOff => 'Dịch vụ định vị đang tắt.';
+
+  @override
+  String get openSettings => 'Mở Cài đặt';
+
+  @override
+  String get hideLocation => 'Ẩn vị trí của tôi';
+
+  @override
+  String get hideLocationDesc =>
+      'Không xuất hiện trong Người gần đây và ghép theo khoảng cách';
+
+  @override
+  String get locationHiddenInfo =>
+      'Vị trí của bạn đang ẩn. Bật lại để xem người gần đây.';
+
+  @override
+  String get removeLocation => 'Xoá vị trí đã lưu';
+
+  @override
+  String get updateLocation => 'Cập nhật vị trí';
+
+  @override
+  String get nearbyEmpty =>
+      'Chưa có ai trong bán kính này. Thử mở rộng bán kính nhé!';
+
+  @override
+  String get attachPhoto => 'Ảnh';
+
+  @override
+  String get attachCamera => 'Chụp ảnh';
+
+  @override
+  String get attachFile => 'Tệp';
+
+  @override
+  String get holdToRecord => 'Giữ để ghi âm';
+
+  @override
+  String get releaseToSend => 'Thả để gửi · vuốt sang trái để huỷ';
+
+  @override
+  String get recordTooShort => 'Tin nhắn thoại quá ngắn';
+
+  @override
+  String get voiceMessage => 'Tin nhắn thoại';
+
+  @override
+  String get photoMessage => 'Ảnh';
+
+  @override
+  String fileTooLarge(int mb) {
+    return 'Tệp vượt quá $mb MB';
+  }
+
+  @override
+  String get fileTypeNotAllowed => 'Loại tệp này không được hỗ trợ';
+
+  @override
+  String get uploading => 'Đang tải lên…';
+
+  @override
+  String get download => 'Tải xuống';
+
+  @override
+  String get callVoice => 'Gọi thoại';
+
+  @override
+  String get calling => 'Đang gọi…';
+
+  @override
+  String get incomingCall => 'Cuộc gọi đến';
+
+  @override
+  String incomingCallFrom(String name) {
+    return '$name đang gọi cho bạn';
+  }
+
+  @override
+  String get accept => 'Nghe';
+
+  @override
+  String get decline => 'Từ chối';
+
+  @override
+  String get hangUp => 'Kết thúc';
+
+  @override
+  String get callEnded => 'Cuộc gọi đã kết thúc';
+
+  @override
+  String get callDeclined => 'Cuộc gọi bị từ chối';
+
+  @override
+  String get callNoAnswer => 'Không có người nghe máy';
+
+  @override
+  String get peerBusy => 'Bạn bè đang trong cuộc gọi khác';
+
+  @override
+  String get speaker => 'Loa ngoài';
+
+  @override
+  String get errInvalidAgeRange => 'Độ tuổi không hợp lệ';
 }

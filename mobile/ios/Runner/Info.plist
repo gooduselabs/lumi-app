@@ -3,9 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Lumi cần micro để bạn trò chuyện trong Voice Match.</string>
+	<string>Lumi cần micro cho cuộc gọi thoại, Voice Match và tin nhắn thoại.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Lumi không dùng camera trong phiên bản này.</string>
+	<string>Lumi dùng camera để bạn chụp và gửi ảnh trong trò chuyện.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Lumi cần quyền truy cập ảnh để bạn gửi ảnh trong trò chuyện.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Lumi dùng vị trí gần đúng (~1 km) để tìm người gần bạn. Vị trí chính xác không bao giờ được chia sẻ.</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>

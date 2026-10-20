@@ -33,7 +33,7 @@ class _MatchScreenState extends ConsumerState<MatchScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final s = ref.read(matchControllerProvider);
       if (s.phase == MatchPhase.idle || s.phase == MatchPhase.ended || s.phase == MatchPhase.mutual) {
-        ref.read(matchControllerProvider.notifier).start(widget.mode, genderPref: ref.read(genderPrefProvider));
+        ref.read(matchControllerProvider.notifier).start(widget.mode, genderPref: ref.read(genderPrefProvider), preferNearby: ref.read(preferNearbyProvider));
       }
     });
   }
@@ -589,7 +589,7 @@ class _VoiceSession extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(children: [
       _SessionHeader(state: state, onLeave: onLeave),
-      Expanded(child: VoiceCallPanel(session: state.session!)),
+      Expanded(child: VoiceCallPanel(voice: state.session!.voice, avatarId: state.session!.partner.avatarId)),
       _StatusPill(state: state),
       Padding(padding: const EdgeInsets.fromLTRB(12, 0, 12, 12), child: _LikeBar(state: state)),
     ]);
@@ -623,7 +623,7 @@ class _Ended extends ConsumerWidget {
         GradientButton(
           label: l.findAnother,
           icon: Icons.refresh_rounded,
-          onPressed: () => ctrl.start(mode, genderPref: ref.read(genderPrefProvider)),
+          onPressed: () => ctrl.start(mode, genderPref: ref.read(genderPrefProvider), preferNearby: ref.read(preferNearbyProvider)),
         ),
         const SizedBox(height: 12),
         TextButton(

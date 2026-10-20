@@ -23,8 +23,9 @@ class MatchRepository {
   SocketService get socket => _socket;
 
   /// Returns a session immediately if someone was waiting, otherwise null (wait for `match:found`).
-  Future<MatchSessionInfo?> join(MatchMode mode, String genderPref) async {
-    final data = Map<String, dynamic>.from(await _socket.request<Map>('match:join', {'mode': mode.api, 'gender': genderPref}));
+  Future<MatchSessionInfo?> join(MatchMode mode, String genderPref, {bool preferNearby = false}) async {
+    final data = Map<String, dynamic>.from(
+        await _socket.request<Map>('match:join', {'mode': mode.api, 'gender': genderPref, 'preferNearby': preferNearby}));
     if (data['status'] == 'matched') return MatchSessionInfo.fromJson(Map<String, dynamic>.from(data['session'] as Map));
     return null;
   }

@@ -15,6 +15,12 @@ export function toMe(u: User) {
     interests: u.interests,
     locale: u.locale,
     onboarded: !!u.onboardedAt,
+    agePrefMin: u.agePrefMin,
+    agePrefMax: u.agePrefMax,
+    // Only whether a (coarsened) location is on file; coordinates are never echoed back.
+    hasLocation: u.latCoarse != null && u.lngCoarse != null,
+    locationHidden: u.locationHidden,
+    locationAt: u.locationAt,
     createdAt: u.createdAt,
   };
 }

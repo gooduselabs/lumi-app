@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/network/api_client.dart';
@@ -54,6 +55,21 @@ class ChatRepository {
       final d = await _api.post<Map>('/conversations/$conversationId/messages', data: {'body': body, 'clientId': clientId});
       return ChatMessage.fromJson(Map<String, dynamic>.from(d));
     }
+  }
+
+  /// Multipart upload of an image / voice note / file; the server posts the message.
+  Future<ChatMessage> sendMedia(String conversationId, PendingMedia m, String clientId, {String? caption, void Function(double)? onProgress}) async {
+    final form = FormData.fromMap({
+      'kind': m.kind,
+      'clientId': clientId,
+      if (caption != null && caption.isNotEmpty) 'caption': caption,
+      if (m.durationMs != null) 'durationMs': m.durationMs.toString(),
+      if (m.width != null) 'width': m.width.toString(),
+      if (m.height != null) 'height': m.height.toString(),
+      'file': MultipartFile.fromBytes(m.bytes, filename: m.fileName, contentType: m.mimeType != null ? DioMediaType.parse(m.mimeType!) : null),
+    });
+    final d = await _api.upload<Map>('/conversations/$conversationId/media', form, onProgress: onProgress);
+    return ChatMessage.fromJson(Map<String, dynamic>.from(d));
   }
 
   Future<void> markRead(String conversationId) async {

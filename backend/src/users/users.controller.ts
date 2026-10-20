@@ -1,8 +1,8 @@
-import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Put, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CurrentUser, AuthUser } from '../common/current-user.decorator';
 import { Public } from '../common/public.decorator';
-import { OnboardingDto, UpdateProfileDto } from './dto/profile.dto';
+import { LocationDto, NearbyQuery, OnboardingDto, UpdateProfileDto } from './dto/profile.dto';
 import { AVATAR_IDS, INTERESTS, MAX_INTERESTS } from './meta';
 import { UsersService } from './users.service';
 
@@ -31,6 +31,21 @@ export class UsersController {
   @Patch('me')
   update(@CurrentUser() u: AuthUser, @Body() dto: UpdateProfileDto) {
     return this.users.update(u.id, dto);
+  }
+
+  @Put('me/location')
+  setLocation(@CurrentUser() u: AuthUser, @Body() dto: LocationDto) {
+    return this.users.setLocation(u.id, dto.lat, dto.lng);
+  }
+
+  @Delete('me/location')
+  clearLocation(@CurrentUser() u: AuthUser) {
+    return this.users.clearLocation(u.id);
+  }
+
+  @Get('nearby')
+  nearby(@CurrentUser() u: AuthUser, @Query() q: NearbyQuery) {
+    return this.users.nearby(u.id, q);
   }
 
   @Delete('me')

@@ -12,7 +12,9 @@ import { PrismaModule } from './prisma/prisma.module';
 import { RealtimeCoreModule } from './realtime/realtime.module';
 import { RealtimeGatewayModule } from './realtime/realtime.module.gateway';
 import { RedisModule } from './redis/redis.module';
+import { StorageModule } from './storage/storage.module';
 import { SocialModule } from './social/social.module';
+import { VoiceModule } from './voice/voice.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -24,12 +26,14 @@ import { UsersModule } from './users/users.module';
     }),
     PrismaModule,
     RedisModule,
+    StorageModule,
     MailModule,
     RealtimeCoreModule,
     AuthModule,
     UsersModule,
     SocialModule,
     ChatModule,
+    VoiceModule,
     MatchModule,
     FeedModule,
     RealtimeGatewayModule,

@@ -83,6 +83,12 @@ class ApiClient {
       _wrap(() => dio.post<T>(path, data: data ?? {}, options: Options(extra: {'noAuth': !auth})));
   Future<T> put<T>(String path, {Object? data}) => _wrap(() => dio.put<T>(path, data: data ?? {}));
   Future<T> patch<T>(String path, {Object? data}) => _wrap(() => dio.patch<T>(path, data: data ?? {}));
+  Future<T> upload<T>(String path, FormData form, {void Function(double)? onProgress}) => _wrap(() => dio.post<T>(
+        path,
+        data: form,
+        options: Options(contentType: 'multipart/form-data', sendTimeout: const Duration(minutes: 2), receiveTimeout: const Duration(minutes: 2)),
+        onSendProgress: onProgress == null ? null : (s, t) => t > 0 ? onProgress(s / t) : null,
+      ));
   Future<T> delete<T>(String path) => _wrap(() => dio.delete<T>(path));
 
   Future<T> _wrap<T>(Future<Response<T>> Function() call) async {

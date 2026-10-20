@@ -648,4 +648,165 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get interest_study => 'Study';
+
+  @override
+  String get filters => 'Filters';
+
+  @override
+  String get ageRange => 'Age range';
+
+  @override
+  String ageRangeValue(int min, int max) {
+    return '$min – $max years';
+  }
+
+  @override
+  String get ageRangeHint =>
+      'Only matches people in this range who also accept your age.';
+
+  @override
+  String get genderFilter => 'Gender';
+
+  @override
+  String get preferNearby => 'Prefer people nearby';
+
+  @override
+  String get preferNearbyDesc => 'Match within ~30 km when possible';
+
+  @override
+  String get nearbyTitle => 'People nearby';
+
+  @override
+  String get nearbyDesc => 'See who\'s around you';
+
+  @override
+  String distanceApprox(int km) {
+    return '~$km km';
+  }
+
+  @override
+  String get radius => 'Radius';
+
+  @override
+  String radiusKm(int km) {
+    return '$km km';
+  }
+
+  @override
+  String get locationEnable => 'Enable location';
+
+  @override
+  String get locationWhy =>
+      'Lumi only stores an approximate location (~1 km). Others only see a rough distance, never your coordinates.';
+
+  @override
+  String get locationDenied => 'Location permission was denied.';
+
+  @override
+  String get locationDeniedForever =>
+      'Location is blocked. Enable it in Settings.';
+
+  @override
+  String get locationServiceOff => 'Location services are off.';
+
+  @override
+  String get openSettings => 'Open Settings';
+
+  @override
+  String get hideLocation => 'Hide my location';
+
+  @override
+  String get hideLocationDesc => 'Don\'t appear in Nearby or distance matching';
+
+  @override
+  String get locationHiddenInfo =>
+      'Your location is hidden. Turn it back on to see people nearby.';
+
+  @override
+  String get removeLocation => 'Remove saved location';
+
+  @override
+  String get updateLocation => 'Update location';
+
+  @override
+  String get nearbyEmpty => 'Nobody in this radius yet. Try a wider radius!';
+
+  @override
+  String get attachPhoto => 'Photo';
+
+  @override
+  String get attachCamera => 'Camera';
+
+  @override
+  String get attachFile => 'File';
+
+  @override
+  String get holdToRecord => 'Hold to record';
+
+  @override
+  String get releaseToSend => 'Release to send · slide left to cancel';
+
+  @override
+  String get recordTooShort => 'Voice message too short';
+
+  @override
+  String get voiceMessage => 'Voice message';
+
+  @override
+  String get photoMessage => 'Photo';
+
+  @override
+  String fileTooLarge(int mb) {
+    return 'File is larger than $mb MB';
+  }
+
+  @override
+  String get fileTypeNotAllowed => 'This file type isn\'t supported';
+
+  @override
+  String get uploading => 'Uploading…';
+
+  @override
+  String get download => 'Download';
+
+  @override
+  String get callVoice => 'Voice call';
+
+  @override
+  String get calling => 'Calling…';
+
+  @override
+  String get incomingCall => 'Incoming call';
+
+  @override
+  String incomingCallFrom(String name) {
+    return '$name is calling you';
+  }
+
+  @override
+  String get accept => 'Accept';
+
+  @override
+  String get decline => 'Decline';
+
+  @override
+  String get hangUp => 'Hang up';
+
+  @override
+  String get callEnded => 'Call ended';
+
+  @override
+  String get callDeclined => 'Call declined';
+
+  @override
+  String get callNoAnswer => 'No answer';
+
+  @override
+  String get peerBusy => 'Your friend is in another call';
+
+  @override
+  String get speaker => 'Speaker';
+
+  @override
+  String get errInvalidAgeRange => 'Invalid age range';
 }

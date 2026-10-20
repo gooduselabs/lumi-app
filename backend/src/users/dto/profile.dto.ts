@@ -1,7 +1,8 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Gender } from '@prisma/client';
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
+  IsBoolean, IsInt, IsLatitude, IsLongitude, IsNumber, Max, Min,
   ArrayMaxSize, IsArray, IsDateString, IsEnum, IsIn, IsOptional, IsString, Length, MaxLength,
 } from 'class-validator';
 import { AVATAR_IDS, INTERESTS, MAX_INTERESTS } from '../meta';
@@ -49,4 +50,22 @@ export class UpdateProfileDto {
   @IsIn(INTERESTS as unknown as string[], { each: true }) interests?: string[];
   @ApiPropertyOptional({ enum: ['vi', 'en'] }) @IsOptional() @IsIn(['vi', 'en']) locale?: string;
   @ApiPropertyOptional() @IsOptional() @IsString() @MaxLength(4096) fcmToken?: string;
+  @ApiPropertyOptional({ minimum: 18, maximum: 99 }) @IsOptional() @IsInt() @Min(18) @Max(99) agePrefMin?: number;
+  @ApiPropertyOptional({ minimum: 18, maximum: 99 }) @IsOptional() @IsInt() @Min(18) @Max(99) agePrefMax?: number;
+  @ApiPropertyOptional({ description: 'Hide me from Nearby and distance-based matching' })
+  @IsOptional() @IsBoolean() locationHidden?: boolean;
+}
+
+export class LocationDto {
+  @ApiProperty({ example: 10.7769 }) @IsNumber() @IsLatitude() lat: number;
+  @ApiProperty({ example: 106.7009 }) @IsNumber() @IsLongitude() lng: number;
+}
+
+export class NearbyQuery {
+  @ApiPropertyOptional({ default: 25, minimum: 1, maximum: 200 })
+  @IsOptional() @Type(() => Number) @IsInt() @Min(1) @Max(200) radiusKm?: number;
+  @ApiPropertyOptional({ minimum: 18, maximum: 99 }) @IsOptional() @Type(() => Number) @IsInt() @Min(18) @Max(99) minAge?: number;
+  @ApiPropertyOptional({ minimum: 18, maximum: 99 }) @IsOptional() @Type(() => Number) @IsInt() @Min(18) @Max(99) maxAge?: number;
+  @ApiPropertyOptional({ enum: ['ANY', 'MALE', 'FEMALE'] }) @IsOptional() @IsIn(['ANY', 'MALE', 'FEMALE']) gender?: 'ANY' | 'MALE' | 'FEMALE';
+  @ApiPropertyOptional({ default: 50 }) @IsOptional() @Type(() => Number) @IsInt() @Min(1) @Max(100) limit?: number;
 }

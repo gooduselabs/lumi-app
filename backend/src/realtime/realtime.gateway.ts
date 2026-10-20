@@ -94,10 +94,10 @@ export class RealtimeGateway implements OnGatewayInit, OnGatewayConnection, OnGa
 
   // ---------- matching ----------
   @SubscribeMessage('match:join')
-  join(@ConnectedSocket() s: Socket, @MessageBody() b: { mode?: MatchMode; gender?: GenderPref }) {
+  join(@ConnectedSocket() s: Socket, @MessageBody() b: { mode?: MatchMode; gender?: GenderPref; preferNearby?: boolean }) {
     const mode: MatchMode = b?.mode === 'VOICE' ? 'VOICE' : 'SOUL';
     const pref: GenderPref = b?.gender === 'MALE' || b?.gender === 'FEMALE' ? b.gender : 'ANY';
-    return this.run(s, (uid) => this.match.join(uid, mode, pref));
+    return this.run(s, (uid) => this.match.join(uid, mode, pref, { preferNearby: b?.preferNearby === true }));
   }
 
   @SubscribeMessage('match:leave')

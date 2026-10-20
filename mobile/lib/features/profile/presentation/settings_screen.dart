@@ -12,6 +12,7 @@ import '../../../core/widgets/lumi_avatar.dart';
 import '../../../core/widgets/lumi_logo.dart';
 import '../../auth/application/auth_controller.dart';
 import '../../auth/domain/user.dart';
+import '../../nearby/application/nearby_controller.dart';
 import '../data/profile_repository.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -46,6 +47,24 @@ class SettingsScreen extends ConsumerWidget {
               },
             ),
           ),
+        ]),
+        section([
+          SwitchListTile.adaptive(
+            secondary: const Icon(Icons.location_off_outlined),
+            title: Text(l.hideLocation),
+            subtitle: Text(l.hideLocationDesc, style: const TextStyle(fontSize: 12)),
+            value: me?.locationHidden ?? false,
+            onChanged: (v) => ref.read(locationActionsProvider).setHidden(v).catchError((Object e) {
+              if (context.mounted) showSnack(context, l.errorText(e), error: true);
+              return me!;
+            }),
+          ),
+          if (me?.hasLocation ?? false)
+            ListTile(
+              leading: const Icon(Icons.wrong_location_outlined),
+              title: Text(l.removeLocation),
+              onTap: () => ref.read(locationActionsProvider).clear().ignore(),
+            ),
         ]),
         section([
           ListTile(

@@ -38,7 +38,7 @@ export interface TestUser {
 
 export async function createUser(
   t: TestApp,
-  profile: Partial<{ nickname: string; gender: 'MALE' | 'FEMALE' | 'OTHER'; interests: string[] }> = {},
+  profile: Partial<{ nickname: string; gender: 'MALE' | 'FEMALE' | 'OTHER'; interests: string[]; birthday: string }> = {},
 ): Promise<TestUser> {
   const email = uniqueEmail();
   const reg = await t.http().post('/auth/register').send({ email, password: 'Passw0rd!' }).expect(201);
@@ -51,7 +51,7 @@ export async function createUser(
     .send({
       nickname: profile.nickname ?? 'Tester',
       gender: profile.gender ?? 'MALE',
-      birthday: '1999-04-12',
+      birthday: profile.birthday ?? '1999-04-12',
       avatarId: 'a05',
       bio: 'hello',
       interests: profile.interests ?? ['music', 'travel'],

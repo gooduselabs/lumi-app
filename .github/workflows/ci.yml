@@ -38,7 +38,13 @@ jobs:
       - run: npm ci
       - run: npx prisma generate
       - run: npm run lint
+      - name: Start LiveKit dev server (live token/connection test)
+        run: |
+          curl -sSL https://github.com/livekit/livekit/releases/download/v1.13.10/livekit_1.13.10_linux_amd64.tar.gz | tar xz livekit-server
+          ./livekit-server --dev --bind 127.0.0.1 > /tmp/livekit.log 2>&1 &
+          for i in $(seq 1 30); do curl -sf http://127.0.0.1:7880 >/dev/null && break; sleep 1; done
       - run: npm test
+        env: { LIVEKIT_TEST_URL: "ws://127.0.0.1:7880" }
       - run: npm run build
 
   android:

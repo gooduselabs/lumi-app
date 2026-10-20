@@ -103,7 +103,12 @@ class _ConversationTile extends StatelessWidget {
         ? ''
         : last.isSystem
             ? l.systemMatched
-            : '${last.senderId == meId ? '${l.you}: ' : ''}${last.body}';
+            : '${last.senderId == meId ? '${l.you}: ' : ''}${switch (last.type) {
+                'IMAGE' => '📷 ${l.photoMessage}',
+                'VOICE' => '🎤 ${l.voiceMessage}',
+                'FILE' => '📎 ${last.attachment?.fileName ?? ''}',
+                _ => last.body,
+              }}';
     final unread = c.unread > 0;
     return ListTile(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),

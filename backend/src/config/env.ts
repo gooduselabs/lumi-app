@@ -15,6 +15,14 @@ export interface AppEnv {
   soulMatchSeconds: number;
   voiceMatchSeconds: number;
   livekit: { url?: string; apiKey?: string; apiSecret?: string };
+  storage: {
+    driver: 'local' | 's3';
+    localDir: string;
+    maxUploadBytes: number;
+    urlSecret: string;
+    urlTtlSeconds: number;
+    s3: { bucket?: string; region: string; endpoint?: string; accessKeyId?: string; secretAccessKey?: string; forcePathStyle: boolean };
+  };
 }
 
 const num = (v: string | undefined, d: number) => (v && !Number.isNaN(Number(v)) ? Number(v) : d);
@@ -58,6 +66,21 @@ export function loadEnv(src: NodeJS.ProcessEnv = process.env): AppEnv {
       url: src.LIVEKIT_URL || undefined,
       apiKey: src.LIVEKIT_API_KEY || undefined,
       apiSecret: src.LIVEKIT_API_SECRET || undefined,
+    },
+    storage: {
+      driver: src.STORAGE_DRIVER === 's3' ? 's3' : 'local',
+      localDir: src.UPLOAD_DIR || 'uploads',
+      maxUploadBytes: num(src.MAX_UPLOAD_MB, 20) * 1024 * 1024,
+      urlSecret: src.ATTACHMENT_URL_SECRET || src.JWT_ACCESS_SECRET!,
+      urlTtlSeconds: num(src.ATTACHMENT_URL_TTL_SECONDS, 6 * 3600),
+      s3: {
+        bucket: src.S3_BUCKET || undefined,
+        region: src.S3_REGION || 'auto',
+        endpoint: src.S3_ENDPOINT || undefined,
+        accessKeyId: src.S3_ACCESS_KEY_ID || undefined,
+        secretAccessKey: src.S3_SECRET_ACCESS_KEY || undefined,
+        forcePathStyle: src.S3_FORCE_PATH_STYLE ? bool(src.S3_FORCE_PATH_STYLE) : true,
+      },
     },
   };
 }

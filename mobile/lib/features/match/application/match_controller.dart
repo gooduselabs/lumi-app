@@ -45,10 +45,10 @@ class MatchController extends Notifier<MatchState> {
 
   bool _isCurrent(Map<String, dynamic> d) => state.session != null && d['sessionId'] == state.session!.id;
 
-  Future<void> start(MatchMode mode, {String genderPref = 'ANY'}) async {
+  Future<void> start(MatchMode mode, {String genderPref = 'ANY', bool preferNearby = false}) async {
     state = MatchState(phase: MatchPhase.searching, mode: mode);
     try {
-      final session = await _repo.join(mode, genderPref);
+      final session = await _repo.join(mode, genderPref, preferNearby: preferNearby);
       if (session != null) _enterSession(session);
     } on ApiException catch (e) {
       if (e.code == 'ALREADY_IN_SESSION') return; // a match:found event will arrive / is active

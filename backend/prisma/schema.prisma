@@ -33,6 +33,15 @@ enum MatchStatus {
 enum MessageType {
   TEXT
   SYSTEM
+  IMAGE
+  VOICE
+  FILE
+}
+
+enum AttachmentKind {
+  IMAGE
+  VOICE
+  FILE
 }
 
 enum ReportReason {
@@ -59,6 +68,17 @@ model User {
   locale          String    @default("vi")
   fcmToken        String?
   lastSeenAt      DateTime?
+  /// Who I want to meet: both sides' ranges must accept each other.
+  agePrefMin      Int       @default(18)
+  agePrefMax      Int       @default(99)
+  /// Location is stored coarsened (~1 km grid), never the raw GPS fix.
+  latCoarse       Float?
+  lngCoarse       Float?
+  geohash         String?
+  locationAt      DateTime?
+  locationHidden  Boolean   @default(false)
+
+  @@index([latCoarse, lngCoarse])
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 
@@ -70,6 +90,7 @@ model User {
   reports       Report[]             @relation("reporter")
   reportedIn    Report[]             @relation("target")
   posts         Post[]
+  attachments   Attachment[]
   postLikes     PostLike[]
   friendshipsA  Friendship[]         @relation("friendA")
   friendshipsB  Friendship[]         @relation("friendB")
@@ -159,11 +180,32 @@ model Message {
   type           MessageType  @default(TEXT)
   body           String
   clientId       String?
+  attachmentId   String?      @unique
   createdAt      DateTime     @default(now())
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   sender         User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  attachment     Attachment?  @relation(fields: [attachmentId], references: [id], onDelete: SetNull)
 
   @@index([conversationId, createdAt])
+}
+
+model Attachment {
+  id             String         @id @default(uuid())
+  ownerId        String
+  conversationId String
+  kind           AttachmentKind
+  storageKey     String         @unique
+  mimeType       String
+  sizeBytes      Int
+  fileName       String
+  durationMs     Int?
+  width          Int?
+  height         Int?
+  createdAt      DateTime       @default(now())
+  owner          User           @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  message        Message?
+
+  @@index([conversationId])
 }
 
 model Block {

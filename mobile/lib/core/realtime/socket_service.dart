@@ -31,6 +31,7 @@ class SocketService {
     'soul:message', 'soul:typing',
     'chat:message', 'chat:typing', 'chat:read',
     'presence:update', 'friends:changed',
+    'call:incoming', 'call:accepted', 'call:ended',
   ];
 
   Stream<SocketEvent> get events => _events.stream;

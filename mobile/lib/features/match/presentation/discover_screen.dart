@@ -7,6 +7,9 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/common.dart';
 import '../../../core/widgets/lumi_avatar.dart';
 import '../../auth/application/auth_controller.dart';
+import '../../../core/location/location_service.dart';
+import '../../nearby/application/nearby_controller.dart';
+import '../../nearby/presentation/filter_widgets.dart';
 import '../application/match_controller.dart';
 
 final genderPrefProvider = NotifierProvider<GenderPrefController, String>(GenderPrefController.new);
@@ -17,8 +20,38 @@ class GenderPrefController extends Notifier<String> {
   void set(String v) => state = v;
 }
 
+/// "Prefer nearby" for Soul/Voice Match (requires a shared, non-hidden location).
+final preferNearbyProvider = NotifierProvider<PreferNearbyController, bool>(PreferNearbyController.new);
+
+class PreferNearbyController extends Notifier<bool> {
+  @override
+  bool build() => false;
+  void set(bool v) => state = v;
+}
+
 class DiscoverScreen extends ConsumerWidget {
   const DiscoverScreen({super.key});
+
+  Future<void> _togglePreferNearby(BuildContext context, WidgetRef ref, bool v) async {
+    final me = ref.read(meProvider);
+    if (v && (me == null || !me.hasLocation || me.locationHidden)) {
+      try {
+        await ref.read(locationActionsProvider).share();
+      } catch (e) {
+        if (context.mounted) showLocationError(context, e, ref.read(locationServiceProvider));
+        return;
+      }
+    }
+    ref.read(preferNearbyProvider.notifier).set(v);
+  }
+
+  Future<void> _saveAge(BuildContext context, WidgetRef ref, int min, int max) async {
+    try {
+      await ref.read(locationActionsProvider).setAgeRange(min, max);
+    } catch (e) {
+      if (context.mounted) showSnack(context, context.l10n.errorText(e), error: true);
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -75,16 +108,35 @@ class DiscoverScreen extends ConsumerWidget {
                 onTap: () => context.push('/match?mode=voice'),
               ),
               const SizedBox(height: 22),
-              Text(l.matchFilter, style: const TextStyle(fontWeight: FontWeight.w700)),
+              const SizedBox(height: 14),
+              _NearbyCard(onTap: () => context.push('/nearby')),
+              const SizedBox(height: 22),
+              Text(l.filters, style: const TextStyle(fontWeight: FontWeight.w700)),
               const SizedBox(height: 10),
-              Wrap(spacing: 8, children: [
-                for (final (v, label) in [('ANY', l.filterAny), ('FEMALE', l.genderFemale), ('MALE', l.genderMale)])
-                  ChoiceChip(
-                    label: Text(label),
-                    selected: pref == v,
-                    onSelected: (_) => ref.read(genderPrefProvider.notifier).set(v),
+              GlassCard(
+                key: const Key('discoverFilters'),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text(l.genderFilter, style: const TextStyle(fontWeight: FontWeight.w600)),
+                  const SizedBox(height: 8),
+                  GenderChips(value: pref, onChanged: (v) => ref.read(genderPrefProvider.notifier).set(v)),
+                  const SizedBox(height: 14),
+                  AgeRangeField(
+                    min: me?.agePrefMin ?? 18,
+                    max: me?.agePrefMax ?? 99,
+                    hint: l.ageRangeHint,
+                    onChangeEnd: (a, b) => _saveAge(context, ref, a, b),
                   ),
-              ]),
+                  const Divider(height: 24),
+                  SwitchListTile.adaptive(
+                    contentPadding: EdgeInsets.zero,
+                    value: ref.watch(preferNearbyProvider) && (me?.hasLocation ?? false) && !(me?.locationHidden ?? false),
+                    onChanged: (v) => _togglePreferNearby(context, ref, v),
+                    title: Text(l.preferNearby, style: const TextStyle(fontWeight: FontWeight.w600)),
+                    subtitle: Text(l.preferNearbyDesc, style: const TextStyle(color: AppColors.textMuted, fontSize: 12)),
+                    secondary: const Icon(Icons.near_me_rounded, color: AppColors.cyan),
+                  ),
+                ]),
+              ),
               const SizedBox(height: 26),
               Text(l.howItWorks, style: const TextStyle(fontWeight: FontWeight.w700)),
               const SizedBox(height: 10),
@@ -119,6 +171,36 @@ class DiscoverScreen extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _NearbyCard extends StatelessWidget {
+  const _NearbyCard({required this.onTap});
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    return GlassCard(
+      key: const Key('nearbyCard'),
+      onTap: onTap,
+      padding: const EdgeInsets.all(16),
+      child: Row(children: [
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(color: AppColors.mint.withValues(alpha: 0.18), borderRadius: BorderRadius.circular(14)),
+          child: const Icon(Icons.location_on_rounded, color: AppColors.mint),
+        ),
+        const SizedBox(width: 14),
+        Expanded(
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(l.nearbyTitle, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+            Text(l.nearbyDesc, style: const TextStyle(color: AppColors.textMuted, fontSize: 13)),
+          ]),
+        ),
+        const Icon(Icons.arrow_forward_ios_rounded, size: 16),
+      ]),
     );
   }
 }

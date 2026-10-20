@@ -153,6 +153,45 @@ class ChatController extends Notifier<ChatState> {
     }
   }
 
+  static const maxUploadBytes = 20 * 1024 * 1024;
+
+  /// Optimistically shows the media bubble, uploads, then swaps in the server message.
+  Future<void> sendMedia(PendingMedia media, {ChatMessage? retry}) async {
+    final me = _me;
+    if (me == null) return;
+    if (media.bytes.length > maxUploadBytes) {
+      state = state.copyWith(error: ApiException('FILE_TOO_LARGE', 'File too large'));
+      return;
+    }
+    final clientId = retry?.clientId ?? 'm${DateTime.now().microsecondsSinceEpoch}';
+    final pending = ChatMessage(
+      id: retry?.id ?? clientId,
+      conversationId: conversationId,
+      senderId: me,
+      body: '',
+      type: media.kind,
+      clientId: clientId,
+      createdAt: retry?.createdAt ?? DateTime.now(),
+      status: DeliveryStatus.sending,
+      pending: media,
+    );
+    state = state.copyWith(messages: [pending, ...state.messages.where((m) => m.id != pending.id)]);
+    try {
+      final saved = await _repo.sendMedia(conversationId, media, clientId);
+      if (!ref.mounted) return;
+      _replace(clientId, saved);
+    } on ApiException catch (e) {
+      if (!ref.mounted) return;
+      state = state.copyWith(
+        messages: [for (final m in state.messages) m.clientId == clientId && m.status == DeliveryStatus.sending ? m.copyWith(status: DeliveryStatus.failed) : m],
+        error: e,
+        blocked: e.code == 'BLOCKED' ? true : null,
+      );
+    }
+  }
+
+  void retry(ChatMessage m) => m.pending != null ? sendMedia(m.pending!, retry: m) : send(m.body, retry: m);
+
   void onInputChanged(String text) {
     if (text.isNotEmpty) {
       _setTyping(true);
