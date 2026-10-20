@@ -103,16 +103,16 @@ describe('Soul Match + chat (e2e)', () => {
     const readA = once(sa, 'chat:read');
     await emit(sb, 'chat:read', { conversationId });
     expect((await readA).conversationId).toBe(conversationId);
+    // store-and-forward: queued for B's device (system note + text) until acked
+    const pend = await t.http().get('/messages/pending').set('Authorization', `Bearer ${b.token}`).expect(200);
+    expect(pend.body.items.map((m: any) => m.type)).toEqual(['SYSTEM', 'TEXT']);
+    await t.http().post('/messages/ack').set('Authorization', `Bearer ${b.token}`).send({ ids: pend.body.items.map((m: any) => m.id) }).expect(200);
     const convB2 = await t.http().get('/conversations').set('Authorization', `Bearer ${b.token}`).expect(200);
     expect(convB2.body[0].unread).toBe(0);
 
-    // persistent history over REST (system message + text)
-    const hist = await t.http().get(`/conversations/${conversationId}/messages`).set('Authorization', `Bearer ${b.token}`).expect(200);
-    expect(hist.body.items.map((m: any) => m.type)).toEqual(['TEXT', 'SYSTEM']);
-
-    // outsiders cannot read it
+    // outsiders get nothing
     const c = await createUser(t);
-    await t.http().get(`/conversations/${conversationId}/messages`).set('Authorization', `Bearer ${c.token}`).expect(404);
+    expect((await t.http().get('/messages/pending').set('Authorization', `Bearer ${c.token}`).expect(200)).body.items).toEqual([]);
 
     // block hides the friend and stops messaging
     await t.http().post(`/blocks/${b.id}`).set('Authorization', `Bearer ${a.token}`).expect(200);

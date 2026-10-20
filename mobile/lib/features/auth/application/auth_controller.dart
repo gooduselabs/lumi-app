@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/network/api_exception.dart';
 import '../../../core/providers.dart';
+import '../../chat/data/local_db.dart';
 import '../data/auth_repository.dart';
 import '../domain/user.dart';
 
@@ -73,16 +74,28 @@ class AuthController extends Notifier<AuthState> {
 
   void updateMe(Me me) => state = Authenticated(me);
 
-  Future<void> logout() async {
+  /// [wipeLocal] deletes this user's on-device chat history + attachments + DB key.
+  Future<void> logout({bool wipeLocal = false}) async {
+    final uid = ref.read(meProvider)?.id;
     ref.read(socketServiceProvider).disconnect();
     await _repo.logout();
     state = const Unauthenticated();
+    if (wipeLocal && uid != null) await _wipeAfterClose(uid);
   }
 
+  /// Account deletion always wipes local data.
   Future<void> deleteAccount() async {
+    final uid = ref.read(meProvider)?.id;
     await _repo.deleteAccount();
     ref.read(socketServiceProvider).disconnect();
     state = const Unauthenticated();
+    if (uid != null) await _wipeAfterClose(uid);
+  }
+
+  Future<void> _wipeAfterClose(String uid) async {
+    // The store provider is disposed (DB closed) once meProvider becomes null.
+    await Future<void>.delayed(const Duration(milliseconds: 300));
+    await LocalDb.wipe(uid).catchError((_) {});
   }
 
   void _signedIn(Me me) {

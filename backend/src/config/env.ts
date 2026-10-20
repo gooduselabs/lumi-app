@@ -15,6 +15,10 @@ export interface AppEnv {
   soulMatchSeconds: number;
   voiceMatchSeconds: number;
   livekit: { url?: string; apiKey?: string; apiSecret?: string };
+  /** Undelivered messages/attachments are purged after this many days. */
+  messageTtlDays: number;
+  /** How often the purge job runs (0 = disabled). */
+  purgeIntervalMinutes: number;
   storage: {
     driver: 'local' | 's3';
     localDir: string;
@@ -67,6 +71,8 @@ export function loadEnv(src: NodeJS.ProcessEnv = process.env): AppEnv {
       apiKey: src.LIVEKIT_API_KEY || undefined,
       apiSecret: src.LIVEKIT_API_SECRET || undefined,
     },
+    messageTtlDays: num(src.MESSAGE_TTL_DAYS, 30),
+    purgeIntervalMinutes: num(src.PURGE_INTERVAL_MINUTES, 60),
     storage: {
       driver: src.STORAGE_DRIVER === 's3' ? 's3' : 'local',
       localDir: src.UPLOAD_DIR || 'uploads',

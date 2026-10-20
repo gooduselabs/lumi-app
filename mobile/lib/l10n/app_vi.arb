@@ -381,5 +381,23 @@
   "callNoAnswer": "Không có người nghe máy",
   "peerBusy": "Bạn bè đang trong cuộc gọi khác",
   "speaker": "Loa ngoài",
-  "errInvalidAgeRange": "Độ tuổi không hợp lệ"
+  "errInvalidAgeRange": "Độ tuổi không hợp lệ",
+  "sentStatus": "Đã gửi",
+  "deliveredStatus": "Đã nhận",
+  "logoutKeepTitle": "Giữ lịch sử trò chuyện trên máy này?",
+  "logoutKeepBody": "Tin nhắn chỉ được lưu trên điện thoại của bạn (đã mã hoá), không lưu trên máy chủ. Nếu xoá, lịch sử sẽ mất vĩnh viễn.",
+  "keepData": "Giữ lại",
+  "wipeData": "Xoá khỏi máy",
+  "localStorageNote": "Tin nhắn được lưu mã hoá trên thiết bị này. Đổi/cài lại máy sẽ mất lịch sử nếu chưa sao lưu.",
+  "exportBackup": "Xuất bản sao lưu",
+  "importBackup": "Nhập bản sao lưu",
+  "backupDone": "Đã xuất bản sao lưu",
+  "restoreDone": "Đã khôi phục {count} tin nhắn",
+  "@restoreDone": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

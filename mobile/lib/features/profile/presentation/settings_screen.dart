@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -12,11 +16,42 @@ import '../../../core/widgets/lumi_avatar.dart';
 import '../../../core/widgets/lumi_logo.dart';
 import '../../auth/application/auth_controller.dart';
 import '../../auth/domain/user.dart';
+import '../../chat/application/conversations_controller.dart';
+import '../../chat/data/local_db.dart';
 import '../../nearby/application/nearby_controller.dart';
 import '../data/profile_repository.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
+
+  Future<void> _exportBackup(BuildContext context, WidgetRef ref) async {
+    final l = context.l10n;
+    try {
+      final store = await ref.read(localChatStoreProvider.future);
+      if (store == null) return;
+      final bytes = Uint8List.fromList(utf8.encode(await store.exportJson()));
+      final stamp = DateTime.now().toIso8601String().substring(0, 10);
+      final uri = await FilePicker.saveFile(fileName: 'lumi-backup-$stamp.json', bytes: bytes, mimeType: 'application/json');
+      if (uri != null && context.mounted) showSnack(context, l.backupDone);
+    } catch (e) {
+      if (context.mounted) showSnack(context, l.errorText(e), error: true);
+    }
+  }
+
+  Future<void> _importBackup(BuildContext context, WidgetRef ref) async {
+    final l = context.l10n;
+    try {
+      final files = await FilePicker.pickFiles(type: FileType.custom, allowedExtensions: ['json']);
+      if (files.isEmpty) return;
+      final store = await ref.read(localChatStoreProvider.future);
+      if (store == null) return;
+      final n = await store.importJson(utf8.decode(await files.first.readAsBytes()));
+      ref.invalidate(conversationsProvider);
+      if (context.mounted) showSnack(context, l.restoreDone(n));
+    } catch (e) {
+      if (context.mounted) showSnack(context, l.errorText(e), error: true);
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -46,6 +81,22 @@ class SettingsScreen extends ConsumerWidget {
                 ref.read(profileRepositoryProvider).update({'locale': s.first}).ignore();
               },
             ),
+          ),
+        ]),
+        section([
+          ListTile(
+            leading: const Icon(Icons.phone_android_rounded),
+            title: Text(l.localStorageNote, style: const TextStyle(fontSize: 13, color: AppColors.textMuted)),
+          ),
+          ListTile(
+            leading: const Icon(Icons.upload_file_rounded),
+            title: Text(l.exportBackup),
+            onTap: () => _exportBackup(context, ref),
+          ),
+          ListTile(
+            leading: const Icon(Icons.restore_rounded),
+            title: Text(l.importBackup),
+            onTap: () => _importBackup(context, ref),
           ),
         ]),
         section([
@@ -99,9 +150,23 @@ class SettingsScreen extends ConsumerWidget {
             leading: const Icon(Icons.logout_rounded, color: AppColors.amber),
             title: Text(l.logout),
             onTap: () async {
-              if (await confirmDialog(context, l.logoutConfirm, confirm: l.logout)) {
-                await ref.read(authControllerProvider.notifier).logout();
-              }
+              final choice = await showDialog<String>(
+                context: context,
+                builder: (ctx) => AlertDialog(
+                  title: Text(l.logoutKeepTitle),
+                  content: Text(l.logoutKeepBody),
+                  actions: [
+                    TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l.cancel)),
+                    TextButton(
+                      onPressed: () => Navigator.pop(ctx, 'wipe'),
+                      child: Text(l.wipeData, style: const TextStyle(color: AppColors.danger)),
+                    ),
+                    FilledButton(onPressed: () => Navigator.pop(ctx, 'keep'), child: Text(l.keepData)),
+                  ],
+                ),
+              );
+              if (choice == null) return;
+              await ref.read(authControllerProvider.notifier).logout(wipeLocal: choice == 'wipe');
             },
           ),
           ListTile(

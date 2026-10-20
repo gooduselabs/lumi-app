@@ -249,5 +249,16 @@
   "callNoAnswer": "No answer",
   "peerBusy": "Your friend is in another call",
   "speaker": "Speaker",
-  "errInvalidAgeRange": "Invalid age range"
+  "errInvalidAgeRange": "Invalid age range",
+  "sentStatus": "Sent",
+  "deliveredStatus": "Delivered",
+  "logoutKeepTitle": "Keep chat history on this device?",
+  "logoutKeepBody": "Messages are stored only on your phone (encrypted), never on the server. If you wipe them, history is gone for good.",
+  "keepData": "Keep",
+  "wipeData": "Wipe",
+  "localStorageNote": "Messages are stored encrypted on this device. Changing or reinstalling your phone loses history unless you back it up.",
+  "exportBackup": "Export backup",
+  "importBackup": "Import backup",
+  "backupDone": "Backup exported",
+  "restoreDone": "Restored {count} messages"
 }

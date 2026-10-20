@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:file_picker/file_picker.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -99,16 +101,19 @@ class _ImageContent extends StatelessWidget {
     final w = (a?.width ?? p?.width ?? 4).toDouble();
     final h = (a?.height ?? p?.height ?? 3).toDouble();
     final ratio = (w / h).clamp(0.6, 1.8);
+    final local = a?.localPath;
     final Widget img = p != null
         ? Image.memory(p.bytes, fit: BoxFit.cover)
-        : Image.network(
+        : local != null
+            ? Image.file(File(local), fit: BoxFit.cover, errorBuilder: (_, _, _) => const ColoredBox(color: AppColors.surfaceHigh, child: Center(child: Icon(Icons.broken_image_outlined))))
+            : Image.network(
             a!.absoluteUrl,
             fit: BoxFit.cover,
             loadingBuilder: (_, child, prog) => prog == null ? child : const ColoredBox(color: AppColors.surfaceHigh, child: Center(child: CircularProgressIndicator(strokeWidth: 2))),
             errorBuilder: (_, _, _) => const ColoredBox(color: AppColors.surfaceHigh, child: Center(child: Icon(Icons.broken_image_outlined))),
           );
     return GestureDetector(
-      onTap: a == null ? null : () => _openViewer(context, a.absoluteUrl),
+      onTap: a == null ? null : () => _openViewer(context, a),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(14),
         child: SizedBox(width: 220, child: AspectRatio(aspectRatio: ratio, child: img)),
@@ -116,12 +121,14 @@ class _ImageContent extends StatelessWidget {
     );
   }
 
-  void _openViewer(BuildContext context, String url) => showDialog<void>(
+  void _openViewer(BuildContext context, ChatAttachment a) => showDialog<void>(
         context: context,
         barrierColor: Colors.black87,
         builder: (ctx) => GestureDetector(
           onTap: () => Navigator.pop(ctx),
-          child: InteractiveViewer(child: Center(child: Image.network(url))),
+          child: InteractiveViewer(
+            child: Center(child: a.localPath != null ? Image.file(File(a.localPath!)) : Image.network(a.absoluteUrl)),
+          ),
         ),
       );
 }
@@ -150,7 +157,11 @@ class _FileContent extends StatelessWidget {
     final size = a?.sizeBytes ?? m.pending?.bytes.length ?? 0;
     return InkWell(
       borderRadius: BorderRadius.circular(12),
-      onTap: a == null ? null : () => launchUrl(Uri.parse(a.downloadUrl), mode: LaunchMode.externalApplication),
+      onTap: a == null
+          ? null
+          : () => a.localPath != null
+              ? OpenFilex.open(a.localPath!, type: a.mimeType)
+              : launchUrl(Uri.parse(a.downloadUrl), mode: LaunchMode.externalApplication),
       child: SizedBox(
         width: 230,
         child: Row(children: [
@@ -166,7 +177,7 @@ class _FileContent extends StatelessWidget {
               Text(name, maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w600)),
               const SizedBox(height: 2),
               Text(
-                a == null ? l.uploading : '${formatBytes(size)} · ${l.download}',
+                a == null || m.status == DeliveryStatus.sending ? l.uploading : formatBytes(size),
                 style: TextStyle(fontSize: 12, color: Colors.white.withValues(alpha: 0.7)),
               ),
             ]),
@@ -198,7 +209,7 @@ class _VoiceMessagePlayerState extends State<VoiceMessagePlayer> {
 
   Future<void> _toggle() async {
     final a = widget.m.attachment;
-    if (a == null) return;
+    if (a == null || (a.localPath == null && a.url.isEmpty)) return;
     var p = _player;
     if (p == null) {
       setState(() => _loading = true);
@@ -213,7 +224,11 @@ class _VoiceMessagePlayerState extends State<VoiceMessagePlayer> {
         setState(() => _playing = s.playing && s.processingState != ProcessingState.completed);
       }));
       try {
-        await p.setUrl(a.absoluteUrl);
+        if (a.localPath != null) {
+          await p.setFilePath(a.localPath!);
+        } else {
+          await p.setUrl(a.absoluteUrl);
+        }
       } catch (_) {
         if (mounted) setState(() => _loading = false);
         return;

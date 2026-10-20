@@ -1597,6 +1597,72 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Độ tuổi không hợp lệ'**
   String get errInvalidAgeRange;
+
+  /// No description provided for @sentStatus.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã gửi'**
+  String get sentStatus;
+
+  /// No description provided for @deliveredStatus.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã nhận'**
+  String get deliveredStatus;
+
+  /// No description provided for @logoutKeepTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Giữ lịch sử trò chuyện trên máy này?'**
+  String get logoutKeepTitle;
+
+  /// No description provided for @logoutKeepBody.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tin nhắn chỉ được lưu trên điện thoại của bạn (đã mã hoá), không lưu trên máy chủ. Nếu xoá, lịch sử sẽ mất vĩnh viễn.'**
+  String get logoutKeepBody;
+
+  /// No description provided for @keepData.
+  ///
+  /// In vi, this message translates to:
+  /// **'Giữ lại'**
+  String get keepData;
+
+  /// No description provided for @wipeData.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xoá khỏi máy'**
+  String get wipeData;
+
+  /// No description provided for @localStorageNote.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tin nhắn được lưu mã hoá trên thiết bị này. Đổi/cài lại máy sẽ mất lịch sử nếu chưa sao lưu.'**
+  String get localStorageNote;
+
+  /// No description provided for @exportBackup.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xuất bản sao lưu'**
+  String get exportBackup;
+
+  /// No description provided for @importBackup.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nhập bản sao lưu'**
+  String get importBackup;
+
+  /// No description provided for @backupDone.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã xuất bản sao lưu'**
+  String get backupDone;
+
+  /// No description provided for @restoreDone.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã khôi phục {count} tin nhắn'**
+  String restoreDone(int count);
 }
 
 class _AppLocalizationsDelegate

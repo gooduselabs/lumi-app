@@ -174,8 +174,8 @@ describe('v1.1 features (e2e)', () => {
       const fdl = await t.http().get(`/attachments/${file.body.attachment.id}`).set(auth(b)).expect(200);
       expect(fdl.headers['content-disposition']).toContain('attachment;');
 
-      const hist = await t.http().get(`/conversations/${conv}/messages`).set(auth(b)).expect(200);
-      expect(hist.body.items.slice(0, 3).map((m: any) => m.type)).toEqual(['FILE', 'VOICE', 'IMAGE']);
+      const hist = await t.http().get('/messages/pending').set(auth(b)).expect(200);
+      expect(hist.body.items.slice(-3).map((m: any) => m.type)).toEqual(['IMAGE', 'VOICE', 'FILE']);
       const list = await t.http().get('/conversations').set(auth(b)).expect(200);
       expect(list.body[0].lastMessage.type).toBe('FILE');
     });

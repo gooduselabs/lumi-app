@@ -809,4 +809,41 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errInvalidAgeRange => 'Invalid age range';
+
+  @override
+  String get sentStatus => 'Sent';
+
+  @override
+  String get deliveredStatus => 'Delivered';
+
+  @override
+  String get logoutKeepTitle => 'Keep chat history on this device?';
+
+  @override
+  String get logoutKeepBody =>
+      'Messages are stored only on your phone (encrypted), never on the server. If you wipe them, history is gone for good.';
+
+  @override
+  String get keepData => 'Keep';
+
+  @override
+  String get wipeData => 'Wipe';
+
+  @override
+  String get localStorageNote =>
+      'Messages are stored encrypted on this device. Changing or reinstalling your phone loses history unless you back it up.';
+
+  @override
+  String get exportBackup => 'Export backup';
+
+  @override
+  String get importBackup => 'Import backup';
+
+  @override
+  String get backupDone => 'Backup exported';
+
+  @override
+  String restoreDone(int count) {
+    return 'Restored $count messages';
+  }
 }

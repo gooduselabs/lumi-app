@@ -78,7 +78,7 @@ npm run smoke                   # kịch bản E2E: 2 user đăng ký → match 
 npm test
 ```
 
-Kết quả: auth, matching, chat, tuổi/vị trí/media/gọi thoại e2e cùng unit test, 48/48 pass (kèm test LiveKit sống khi có `LIVEKIT_TEST_URL`).
+Kết quả: auth, matching, chat, tuổi/vị trí/media/gọi thoại e2e cùng unit test, 53/53 pass (kèm test LiveKit sống khi có `LIVEKIT_TEST_URL`).
 
 ### LiveKit (gọi thoại)
 
@@ -100,6 +100,15 @@ Production: dùng LiveKit Cloud (`wss://<project>.livekit.cloud`) hoặc tự ho
 `STORAGE_DRIVER=local` (mặc định) ghi vào `backend/uploads/` (đã gitignore). `STORAGE_DRIVER=s3` dùng mọi dịch vụ tương thích S3 (AWS S3, Cloudflare R2, MinIO, B2…): `S3_BUCKET`, `S3_REGION`, `S3_ENDPOINT`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_FORCE_PATH_STYLE`. Giới hạn `MAX_UPLOAD_MB=20`.
 Tải xuống `GET /attachments/:id` cần Bearer token của thành viên cuộc trò chuyện, hoặc URL ký HMAC ngắn hạn (`?exp&sig`, do API trả về trong mỗi tin nhắn) để widget ảnh/âm thanh tải được mà không cần header. Ảnh được kiểm tra magic bytes; tệp phải nằm trong allowlist MIME + đuôi; tên tệp được làm sạch.
 
+### Tin nhắn lưu trên thiết bị (v1.2, store‑and‑forward kiểu WhatsApp)
+
+- **Máy chủ không giữ lịch sử.** Mỗi tin nhắn (và tệp đính kèm) chỉ nằm trên server trong hàng đợi của người nhận (`Message.recipientId`, `expiresAt`). Khi thiết bị người nhận đã lưu tin nhắn và tải xong tệp, nó gửi ack (`chat:ack` qua socket hoặc `POST /messages/ack {ids}`), server **xoá hàng trong DB và blob tệp** ngay, rồi báo `chat:delivered` cho người gửi (✓ Đã nhận). Biên nhận đã xem (`chat:read`) vẫn hoạt động.
+- Thiết bị nhận hàng đợi khi kết nối (server đẩy `chat:pending`) và qua REST `GET /messages/pending` (lặp tới khi hết). `GET /conversations/:id/messages` đã bị **gỡ bỏ**.
+- Tin chưa giao được quá `MESSAGE_TTL_DAYS` (mặc định 30) bị job dọn dẹp xoá (`PURGE_INTERVAL_MINUTES`, mặc định 60), kèm các upload mồ côi.
+- **App:** lịch sử nằm trong SQLite mã hoá SQLCipher (`sqflite_sqlcipher`), khoá 256‑bit ngẫu nhiên lưu trong Keychain/Keystore (`flutter_secure_storage`), mỗi tài khoản một DB; tệp đã tải/đã gửi lưu trong thư mục documents của app. Giao diện chat đọc từ DB cục bộ nên xem được khi offline. Đăng xuất: chọn **Giữ lại** hoặc **Xoá khỏi máy**; xoá tài khoản luôn xoá dữ liệu cục bộ.
+- ⚠️ **Không đồng bộ nhiều thiết bị.** Mất máy, cài lại app hoặc đổi điện thoại ⇒ mất lịch sử, trừ khi đã sao lưu. Cài đặt → *Xuất bản sao lưu* tạo tệp JSON (chỉ chữ và metadata, **không** kèm tệp đính kèm, **không mã hoá** – hãy giữ cẩn thận) và *Nhập bản sao lưu* để khôi phục.
+- Tin nhắn đang ở server trước khi giao vẫn ở dạng rõ (chưa mã hoá đầu‑cuối); E2EE là bước tiếp theo nếu cần.
+
 ### API mới (v1.1)
 
 | | |
@@ -107,6 +116,7 @@ Tải xuống `GET /attachments/:id` cần Bearer token của thành viên cuộ
 | `PATCH /me {agePrefMin, agePrefMax, locationHidden}` | tuỳ chọn ghép |
 | `PUT /me/location {lat,lng}` · `DELETE /me/location` | lưu vị trí đã làm tròn ~1 km (toạ độ gốc bị bỏ ngay) |
 | `GET /nearby?radiusKm&minAge&maxAge&gender` | người gần đây, trả `distanceKm` xấp xỉ, không bao giờ trả toạ độ |
+| `GET /messages/pending` · `POST /messages/ack {ids}` (v1.2) | nhận hàng đợi / xác nhận đã lưu → server xoá |
 | `POST /conversations/:id/media` (multipart `file`, `kind`=IMAGE/VOICE/FILE, `durationMs`, `width`, `height`, `caption`, `clientId`) | gửi tin nhắn media |
 | `GET /attachments/:id` | tải tệp (Bearer hoặc URL ký) |
 | `POST /calls {conversationId}` · `/calls/:id/accept` · `/decline` · `/end` | gọi 1‑1 với bạn bè, trả token LiveKit |
@@ -133,7 +143,7 @@ Xác thực qua `auth: { token: <accessToken> }`. Ack trả về `{ok, data}` ho
 | `match:join {mode}` · `match:leave` · `match:like` · `match:skip` | `match:found` · `match:liked` · `match:mutual` · `match:ended` |
 | `soul:message` · `soul:typing` | `soul:message` · `soul:typing` |
 | `chat:send` · `chat:typing` · `chat:read` | `chat:message` · `chat:typing` · `chat:read` · `presence:update` · `friends:changed` |
-| `match:join {mode, gender, preferNearby}` | `call:incoming` · `call:accepted` · `call:ended` |
+| `match:join {mode, gender, preferNearby}` · `chat:ack {ids}` · `chat:pending` | `call:incoming` · `call:accepted` · `call:ended` · `chat:pending` · `chat:delivered` |
 
 ## Cấu trúc
 

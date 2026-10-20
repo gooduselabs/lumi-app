@@ -86,6 +86,11 @@ class PublicUser {
         interests: interests, online: online ?? this.online, lastSeenAt: lastSeenAt, distanceKm: distanceKm,
       );
 
+  Map<String, dynamic> toJson() => {
+        'id': id, 'nickname': nickname, 'avatarId': avatarId, 'gender': gender, 'age': age, 'bio': bio,
+        'interests': interests, 'lastSeenAt': lastSeenAt?.toIso8601String(),
+      };
+
   factory PublicUser.fromJson(Map<String, dynamic> j) => PublicUser(
         id: j['id'] as String,
         nickname: (j['nickname'] as String?) ?? 'Lumi',

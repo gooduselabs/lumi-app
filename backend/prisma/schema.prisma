@@ -173,10 +173,14 @@ model ConversationMember {
   @@index([userId])
 }
 
+/// Store-and-forward: a row lives only until the recipient's device acks it
+/// (or `expiresAt` passes). History is kept on devices, never on the server.
 model Message {
   id             String       @id @default(uuid())
   conversationId String
   senderId       String
+  recipientId    String
+  expiresAt      DateTime
   type           MessageType  @default(TEXT)
   body           String
   clientId       String?
@@ -187,6 +191,8 @@ model Message {
   attachment     Attachment?  @relation(fields: [attachmentId], references: [id], onDelete: SetNull)
 
   @@index([conversationId, createdAt])
+  @@index([recipientId, createdAt])
+  @@index([expiresAt])
 }
 
 model Attachment {

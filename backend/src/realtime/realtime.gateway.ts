@@ -56,6 +56,11 @@ export class RealtimeGateway implements OnGatewayInit, OnGatewayConnection, OnGa
       const wasOnline = this.rt.isOnline(id);
       await socket.join(userRoom(id));
       socket.emit('ready', { userId: id });
+      // Store-and-forward: hand the device whatever was queued while it was offline.
+      void this.chat
+        .pending(id)
+        .then((p) => p.items.length && socket.emit('chat:pending', p))
+        .catch((e) => this.logger.error(e));
       if (!wasOnline) void this.broadcastPresence(id, true);
     } catch {
       socket.emit('auth_error', { code: 'UNAUTHORIZED' });
@@ -134,6 +139,16 @@ export class RealtimeGateway implements OnGatewayInit, OnGatewayConnection, OnGa
   @SubscribeMessage('chat:typing')
   chatTyping(@ConnectedSocket() s: Socket, @MessageBody() b: { conversationId: string; isTyping: boolean }) {
     return this.run(s, (uid) => this.chat.typing(uid, String(b?.conversationId), !!b?.isTyping));
+  }
+
+  @SubscribeMessage('chat:ack')
+  chatAck(@ConnectedSocket() s: Socket, @MessageBody() b: { ids?: string[] }) {
+    return this.run(s, (uid) => this.chat.ack(uid, Array.isArray(b?.ids) ? b.ids.map(String) : []));
+  }
+
+  @SubscribeMessage('chat:pending')
+  chatPending(@ConnectedSocket() s: Socket) {
+    return this.run(s, (uid) => this.chat.pending(uid));
   }
 
   @SubscribeMessage('chat:read')

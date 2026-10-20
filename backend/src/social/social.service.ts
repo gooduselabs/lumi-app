@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { messageTtlMs } from '../chat/ttl';
 import { Prisma } from '@prisma/client';
 import { Errors } from '../common/errors';
 import { orderedPair } from '../common/pair';
@@ -83,7 +84,11 @@ export class SocialService {
           data: { members: { create: [{ userId: x }, { userId: y }] }, lastMessageAt: new Date() },
         });
         await tx.friendship.create({ data: { userAId: x, userBId: y, conversationId: conv.id } });
-        await tx.message.create({ data: { conversationId: conv.id, senderId: a, type: 'SYSTEM', body: systemText } });
+        // One queued copy per member: each device stores it locally once delivered.
+        const expiresAt = new Date(Date.now() + messageTtlMs());
+        await tx.message.createMany({
+          data: [x, y].map((recipientId) => ({ conversationId: conv.id, senderId: a, recipientId, expiresAt, type: 'SYSTEM' as const, body: systemText })),
+        });
         return { conversationId: conv.id, created: true };
       });
     } catch (e) {

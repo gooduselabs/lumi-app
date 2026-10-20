@@ -3,7 +3,8 @@ import 'dart:typed_data';
 import '../../../core/config/env.dart';
 import '../../auth/domain/user.dart';
 
-enum DeliveryStatus { sending, sent, failed }
+/// sending → sent (server queued) → delivered (on peer's device). Read is tracked per conversation.
+enum DeliveryStatus { sending, sent, delivered, failed }
 
 class ChatAttachment {
   const ChatAttachment({
@@ -16,8 +17,11 @@ class ChatAttachment {
     this.durationMs,
     this.width,
     this.height,
+    this.localPath,
   });
 
+  /// File saved in the app documents dir once downloaded (the server copy is deleted on ack).
+  final String? localPath;
   final String id;
   final String kind; // IMAGE | VOICE | FILE
   final String mimeType;
@@ -32,7 +36,18 @@ class ChatAttachment {
   String get absoluteUrl => url.startsWith('http') ? url : '${Env.apiBaseUrl}$url';
   String get downloadUrl => '$absoluteUrl${absoluteUrl.contains('?') ? '&' : '?'}download=1';
 
+  ChatAttachment withLocalPath(String? path) => ChatAttachment(
+        id: id, kind: kind, mimeType: mimeType, sizeBytes: sizeBytes, fileName: fileName, url: url,
+        durationMs: durationMs, width: width, height: height, localPath: path,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id, 'kind': kind, 'mimeType': mimeType, 'sizeBytes': sizeBytes, 'fileName': fileName, 'url': url,
+        'durationMs': durationMs, 'width': width, 'height': height, 'localPath': localPath,
+      };
+
   factory ChatAttachment.fromJson(Map<String, dynamic> j) => ChatAttachment(
+        localPath: j['localPath'] as String?,
         id: j['id'] as String,
         kind: j['kind'] as String,
         mimeType: j['mimeType'] as String,
@@ -97,9 +112,9 @@ class ChatMessage {
 
   bool get isSystem => type == 'SYSTEM';
 
-  ChatMessage copyWith({DeliveryStatus? status}) => ChatMessage(
-        id: id, conversationId: conversationId, senderId: senderId, body: body, createdAt: createdAt,
-        type: type, clientId: clientId, status: status ?? this.status, attachment: attachment, pending: pending,
+  ChatMessage copyWith({DeliveryStatus? status, ChatAttachment? attachment, String? id}) => ChatMessage(
+        id: id ?? this.id, conversationId: conversationId, senderId: senderId, body: body, createdAt: createdAt,
+        type: type, clientId: clientId, status: status ?? this.status, attachment: attachment ?? this.attachment, pending: pending,
       );
 
   factory ChatMessage.fromJson(Map<String, dynamic> j) => ChatMessage(

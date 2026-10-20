@@ -5,7 +5,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiProperty, ApiPropertyOptional, ApiTags } from '@nestjs/swagger';
 import { AttachmentKind } from '@prisma/client';
 import { Type } from 'class-transformer';
-import { IsEnum, IsInt, IsOptional, IsString, Max, MaxLength, Min, MinLength } from 'class-validator';
+import { ArrayMaxSize, IsArray, IsUUID, IsEnum, IsInt, IsOptional, IsString, Max, MaxLength, Min, MinLength } from 'class-validator';
 import type { Response } from 'express';
 import { AuthService } from '../auth/auth.service';
 import { Public } from '../common/public.decorator';
@@ -13,7 +13,6 @@ import { loadEnv } from '../config/env';
 import { MAX_CAPTION, MAX_VOICE_MS } from './media';
 import { AuthUser, CurrentUser } from '../common/current-user.decorator';
 import { ChatService, MAX_MESSAGE_LENGTH } from './chat.service';
-import { HistoryQuery } from './dto/chat.dto';
 
 class SendMessageDto {
   @ApiProperty() @IsString() @MinLength(1) @MaxLength(MAX_MESSAGE_LENGTH) body: string;
@@ -60,11 +59,6 @@ export class ChatController {
     return this.chat.conversation(u.id, id);
   }
 
-  @Get(':id/messages')
-  history(@CurrentUser() u: AuthUser, @Param('id', ParseUUIDPipe) id: string, @Query() q: HistoryQuery) {
-    return this.chat.history(u.id, id, q.before, q.limit);
-  }
-
   @Post(':id/messages')
   send(@CurrentUser() u: AuthUser, @Param('id', ParseUUIDPipe) id: string, @Body() dto: SendMessageDto) {
     return this.chat.send(u.id, id, dto.body, dto.clientId);
@@ -87,6 +81,33 @@ export class ChatController {
   @HttpCode(200)
   read(@CurrentUser() u: AuthUser, @Param('id', ParseUUIDPipe) id: string) {
     return this.chat.markRead(u.id, id);
+  }
+}
+
+class AckDto {
+  @ApiProperty({ type: [String] }) @IsArray() @ArrayMaxSize(500) @IsUUID('4', { each: true }) ids: string[];
+}
+
+class PendingQuery {
+  @IsOptional() @Type(() => Number) @IsInt() @Min(1) @Max(500) limit?: number;
+}
+
+/** Store-and-forward delivery: pull queued messages, ack to delete them server-side. */
+@ApiTags('chat')
+@ApiBearerAuth()
+@Controller('messages')
+export class MessagesController {
+  constructor(private readonly chat: ChatService) {}
+
+  @Get('pending')
+  pending(@CurrentUser() u: AuthUser, @Query() q: PendingQuery) {
+    return this.chat.pending(u.id, q.limit);
+  }
+
+  @Post('ack')
+  @HttpCode(200)
+  ack(@CurrentUser() u: AuthUser, @Body() dto: AckDto) {
+    return this.chat.ack(u.id, dto.ids);
   }
 }
 

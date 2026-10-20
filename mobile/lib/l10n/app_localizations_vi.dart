@@ -816,4 +816,41 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get errInvalidAgeRange => 'Độ tuổi không hợp lệ';
+
+  @override
+  String get sentStatus => 'Đã gửi';
+
+  @override
+  String get deliveredStatus => 'Đã nhận';
+
+  @override
+  String get logoutKeepTitle => 'Giữ lịch sử trò chuyện trên máy này?';
+
+  @override
+  String get logoutKeepBody =>
+      'Tin nhắn chỉ được lưu trên điện thoại của bạn (đã mã hoá), không lưu trên máy chủ. Nếu xoá, lịch sử sẽ mất vĩnh viễn.';
+
+  @override
+  String get keepData => 'Giữ lại';
+
+  @override
+  String get wipeData => 'Xoá khỏi máy';
+
+  @override
+  String get localStorageNote =>
+      'Tin nhắn được lưu mã hoá trên thiết bị này. Đổi/cài lại máy sẽ mất lịch sử nếu chưa sao lưu.';
+
+  @override
+  String get exportBackup => 'Xuất bản sao lưu';
+
+  @override
+  String get importBackup => 'Nhập bản sao lưu';
+
+  @override
+  String get backupDone => 'Đã xuất bản sao lưu';
+
+  @override
+  String restoreDone(int count) {
+    return 'Đã khôi phục $count tin nhắn';
+  }
 }

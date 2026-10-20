@@ -33,17 +33,6 @@ class ChatRepository {
     );
   }
 
-  Future<({List<ChatMessage> items, bool hasMore})> history(String id, {DateTime? before, int limit = 30}) async {
-    final j = await _api.get<Map>('/conversations/$id/messages', query: {
-      'limit': limit,
-      if (before != null) 'before': before.toUtc().toIso8601String(),
-    });
-    return (
-      items: (j['items'] as List).map((e) => ChatMessage.fromJson(Map<String, dynamic>.from(e as Map))).toList(),
-      hasMore: j['hasMore'] == true,
-    );
-  }
-
   /// Socket first (realtime ack); falls back to REST when the socket is down.
   Future<ChatMessage> send(String conversationId, String body, String clientId) async {
     final payload = {'conversationId': conversationId, 'body': body, 'clientId': clientId};

@@ -1,7 +1,8 @@
 import { Global, Module } from '@nestjs/common';
-import { AttachmentsController, ChatController } from './chat.controller';
+import { AttachmentsController, ChatController, MessagesController } from './chat.controller';
 import { ChatService } from './chat.service';
+import { PurgeJob } from './purge.job';
 
 @Global()
-@Module({ controllers: [ChatController, AttachmentsController], providers: [ChatService], exports: [ChatService] })
+@Module({ controllers: [ChatController, AttachmentsController, MessagesController], providers: [ChatService, PurgeJob], exports: [ChatService] })
 export class ChatModule {}

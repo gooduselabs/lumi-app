@@ -104,7 +104,8 @@ export class ChatService {
         conversation: {
           include: {
             members: { include: { user: { select: publicSelect } } },
-            messages: { orderBy: { createdAt: 'desc' }, take: 1, include: { attachment: true } },
+            // Only messages still queued for me exist server-side.
+            messages: { where: { recipientId: userId }, orderBy: { createdAt: 'desc' }, take: 1, include: { attachment: true } },
           },
         },
       },
@@ -113,12 +114,9 @@ export class ChatService {
       memberships.map(async (m) => {
         const other = m.conversation.members.find((x) => x.userId !== userId);
         if (!other || blocked.has(other.userId)) return null;
+        // Server-side unread = undelivered for me; devices add their own local unread count.
         const unread = await this.prisma.message.count({
-          where: {
-            conversationId: m.conversationId,
-            senderId: { not: userId },
-            ...(m.lastReadAt ? { createdAt: { gt: m.lastReadAt } } : {}),
-          },
+          where: { conversationId: m.conversationId, recipientId: userId, type: { not: 'SYSTEM' } },
         });
         const last = m.conversation.messages[0];
         return {
@@ -147,15 +145,72 @@ export class ChatService {
     };
   }
 
-  async history(userId: string, conversationId: string, before?: string, limit = 30) {
-    await this.membership(userId, conversationId);
+  /** Messages queued for this user's device (oldest first). The device must ack them. */
+  async pending(userId: string, limit = 200) {
     const rows = await this.prisma.message.findMany({
-      where: { conversationId, ...(before ? { createdAt: { lt: new Date(before) } } : {}) },
-      orderBy: { createdAt: 'desc' },
-      take: limit,
+      where: { recipientId: userId, expiresAt: { gt: new Date() } },
+      orderBy: { createdAt: 'asc' },
+      take: Math.min(Math.max(limit, 1), 500),
       include: { attachment: true },
     });
-    return { items: rows.map((m) => this.dto(m)), hasMore: rows.length === limit };
+    const total = await this.prisma.message.count({ where: { recipientId: userId, expiresAt: { gt: new Date() } } });
+    return { items: rows.map((m) => this.dto(m)), hasMore: total > rows.length };
+  }
+
+  /**
+   * Device confirms it stored these messages (and downloaded their attachments):
+   * the server forgets them for good and tells the senders they were delivered.
+   */
+  async ack(userId: string, ids: string[]) {
+    const unique = [...new Set((ids ?? []).filter((x) => typeof x === 'string'))].slice(0, 500);
+    if (!unique.length) return { deleted: 0 };
+    const rows = await this.prisma.message.findMany({
+      where: { id: { in: unique }, recipientId: userId },
+      include: { attachment: true },
+    });
+    if (!rows.length) return { deleted: 0 };
+    await this.deleteMessages(rows);
+    const deliveredAt = new Date();
+    const bySender = new Map<string, { conversationId: string; ids: string[] }[]>();
+    for (const r of rows) {
+      if (r.type === 'SYSTEM' || r.senderId === userId) continue;
+      const list = bySender.get(r.senderId) ?? [];
+      const g = list.find((x) => x.conversationId === r.conversationId);
+      if (g) g.ids.push(r.id);
+      else list.push({ conversationId: r.conversationId, ids: [r.id] });
+      bySender.set(r.senderId, list);
+    }
+    for (const [senderId, groups] of bySender) {
+      for (const g of groups) this.rt.toUser(senderId, 'chat:delivered', { conversationId: g.conversationId, messageIds: g.ids, deliveredAt });
+    }
+    return { deleted: rows.length };
+  }
+
+  private async deleteMessages(rows: (Message & { attachment: Attachment | null })[]) {
+    const atts = rows.map((r) => r.attachment).filter((a): a is Attachment => !!a);
+    await this.prisma.$transaction([
+      this.prisma.message.deleteMany({ where: { id: { in: rows.map((r) => r.id) } } }),
+      this.prisma.attachment.deleteMany({ where: { id: { in: atts.map((a) => a.id) } } }),
+    ]);
+    await Promise.all(atts.map((a) => this.storage.delete(a.storageKey).catch((e) => this.logger.warn(`blob delete ${a.storageKey}: ${e}`))));
+  }
+
+  /** TTL job: drop undelivered messages (and orphaned uploads) past their expiry. */
+  async purgeExpired(now = new Date()) {
+    let total = 0;
+    for (;;) {
+      const rows = await this.prisma.message.findMany({ where: { expiresAt: { lte: now } }, include: { attachment: true }, take: 500 });
+      if (!rows.length) break;
+      await this.deleteMessages(rows);
+      total += rows.length;
+    }
+    const orphanCutoff = new Date(now.getTime() - 24 * 3600 * 1000);
+    const orphans = await this.prisma.attachment.findMany({ where: { message: null, createdAt: { lt: orphanCutoff } }, take: 1000 });
+    if (orphans.length) {
+      await this.prisma.attachment.deleteMany({ where: { id: { in: orphans.map((o) => o.id) } } });
+      await Promise.all(orphans.map((a) => this.storage.delete(a.storageKey).catch(() => undefined)));
+    }
+    return { messages: total, orphans: orphans.length };
   }
 
   async send(userId: string, conversationId: string, body: string, clientId?: string) {
@@ -195,6 +250,8 @@ export class ChatService {
         data: {
           conversationId,
           senderId: userId,
+          recipientId: otherId,
+          expiresAt: new Date(Date.now() + this.env.messageTtlDays * 86_400_000),
           body: d.body,
           type: d.type ?? 'TEXT',
           attachmentId: d.attachmentId,

@@ -29,7 +29,7 @@ class SocketService {
   static const _serverEvents = [
     'match:found', 'match:liked', 'match:mutual', 'match:ended',
     'soul:message', 'soul:typing',
-    'chat:message', 'chat:typing', 'chat:read',
+    'chat:message', 'chat:typing', 'chat:read', 'chat:pending', 'chat:delivered',
     'presence:update', 'friends:changed',
     'call:incoming', 'call:accepted', 'call:ended',
   ];

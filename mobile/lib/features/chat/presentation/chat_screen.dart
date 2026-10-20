@@ -142,7 +142,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
     final peer = state.peer;
     // Last of my messages the peer has seen -> show "Seen" under it.
-    final lastMine = state.messages.where((m) => m.senderId == meId && !m.isSystem && m.status == DeliveryStatus.sent).firstOrNull;
+    final lastMine = state.messages.where((m) => m.senderId == meId && !m.isSystem && (m.status == DeliveryStatus.sent || m.status == DeliveryStatus.delivered)).firstOrNull;
     final seenId = lastMine != null && state.peerLastReadAt != null && !state.peerLastReadAt!.isBefore(lastMine.createdAt) ? lastMine.id : null;
 
     return Scaffold(
@@ -211,6 +211,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                               m: m,
                               mine: m.senderId == meId,
                               seen: m.id == seenId,
+                              last: m.id == lastMine?.id,
                               onRetry: () => _ctrl.retry(m),
                             ),
                         ]);
@@ -324,7 +325,8 @@ class _SystemNote extends StatelessWidget {
 }
 
 class _MessageBubble extends StatelessWidget {
-  const _MessageBubble({required this.m, required this.mine, required this.seen, required this.onRetry});
+  const _MessageBubble({required this.m, required this.mine, required this.seen, required this.onRetry, this.last = false});
+  final bool last;
   final ChatMessage m;
   final bool mine;
   final bool seen;
@@ -337,7 +339,8 @@ class _MessageBubble extends StatelessWidget {
     final status = switch (m.status) {
       DeliveryStatus.sending => l.sending,
       DeliveryStatus.failed => l.failedTapRetry,
-      DeliveryStatus.sent => seen ? l.seen : null,
+      DeliveryStatus.sent => seen ? l.seen : (last ? l.sentStatus : null),
+      DeliveryStatus.delivered => seen ? l.seen : (last ? l.deliveredStatus : null),
     };
     return Align(
       alignment: mine ? Alignment.centerRight : Alignment.centerLeft,
