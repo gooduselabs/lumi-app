@@ -69,6 +69,9 @@ jobs:
       - uses: subosito/flutter-action@v2
         with: { flutter-version: "${{ env.FLUTTER_VERSION }}", channel: stable, cache: true }
       - run: flutter pub get
+      - name: Install CocoaPods deps
+        working-directory: mobile/ios
+        run: pod install --repo-update
       - name: Build iOS (no codesign)
         run: flutter build ios --release --no-codesign --dart-define=API_BASE_URL=$API_BASE_URL
       - name: Package unsigned IPA
