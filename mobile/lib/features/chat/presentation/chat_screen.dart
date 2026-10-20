@@ -19,6 +19,9 @@ import '../application/conversations_controller.dart';
 import '../data/chat_repository.dart';
 import '../domain/chat_models.dart';
 import 'media_widgets.dart';
+import '../../games/domain/game_models.dart';
+import '../../games/presentation/game_picker_sheet.dart';
+import '../../games/presentation/game_result_note.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
   const ChatScreen({super.key, required this.conversationId});
@@ -84,6 +87,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     } catch (e) {
       if (mounted) showSnack(context, l.errorText(e), error: true);
     }
+  }
+
+  void _games({GameKind? kind}) {
+    final peer = ref.read(chatControllerProvider(widget.conversationId)).peer;
+    if (peer == null) return;
+    showGamePicker(context, conversationId: widget.conversationId, peerName: peer.nickname, peerAvatar: peer.avatarId);
   }
 
   Future<void> _call() async {
@@ -172,6 +181,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               ),
         actions: [
           if (!state.blocked && peer != null)
+            IconButton(key: const Key('gamesButton'), tooltip: l.games, onPressed: _games, icon: const Icon(Icons.sports_esports_rounded)),
+          if (!state.blocked && peer != null)
             IconButton(key: const Key('callButton'), tooltip: l.callVoice, onPressed: _call, icon: const Icon(Icons.call_rounded)),
           PopupMenuButton<String>(
             onSelected: _menu,
@@ -204,7 +215,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                         final showDay = older == null || !_sameDay(older.createdAt, m.createdAt);
                         return Column(children: [
                           if (showDay) _DayDivider(m.createdAt),
-                          if (m.isSystem)
+                          if (m.isSystem && GameResult.fromSystemBody(m.body) != null)
+                            GameResultNote(
+                              result: GameResult.fromSystemBody(m.body)!,
+                              meId: meId,
+                              peerName: peer?.nickname ?? '',
+                              onPlay: state.blocked ? null : _games,
+                            )
+                          else if (m.isSystem)
                             _SystemNote(text: l.systemMatched)
                           else
                             _MessageBubble(

@@ -408,5 +408,286 @@
   "serverReset": "Mặc định",
   "serverTest": "Kiểm tra",
   "startupError": "Không khởi động được ứng dụng",
-  "offlineHint": "Không kết nối được máy chủ. Kiểm tra mạng hoặc đổi địa chỉ máy chủ."
+  "offlineHint": "Không kết nối được máy chủ. Kiểm tra mạng hoặc đổi địa chỉ máy chủ.",
+  "games": "Trò chơi",
+  "gamePickTitle": "Chơi cùng {name}",
+  "@gamePickTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "gameTruthDare": "Thật hay Thách",
+  "gameTruthDareDesc": "Quay vòng, trả lời thật lòng hoặc nhận thử thách",
+  "gameKnowMe": "Ai hiểu ai hơn",
+  "gameKnowMeDesc": "Đoán câu trả lời của nhau, xem hai bạn hợp bao nhiêu %",
+  "gameCaro": "Cờ caro",
+  "gameCaroDesc": "Bàn 15×15 — ai nối được 5 quân trước thì thắng",
+  "gameDraw": "Vẽ đoán hình",
+  "gameDrawDesc": "Một người vẽ, người kia đoán từ trước khi hết giờ",
+  "gameInviteSent": "Đang chờ {name} chấp nhận…",
+  "@gameInviteSent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "gameDeclined": "{name} chưa muốn chơi lúc này",
+  "@gameDeclined": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "gameInvitedYou": "{name} mời bạn chơi",
+  "@gameInvitedYou": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAccept": "Chơi luôn",
+  "gameDecline": "Để sau",
+  "gameCancel": "Huỷ lời mời",
+  "gameYourTurn": "Lượt của bạn",
+  "gamePeerTurn": "Lượt của {name}",
+  "@gamePeerTurn": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "gameYouWin": "Bạn thắng! 🎉",
+  "gamePeerWins": "{name} thắng!",
+  "@gamePeerWins": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "gameTie": "Hoà nhau 🤝",
+  "gameForfeit": "{name} đã rời trò chơi",
+  "@gameForfeit": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAbandoned": "{name} mất kết nối quá lâu",
+  "@gameAbandoned": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "gameRematch": "Chơi lại",
+  "gameRematchAsked": "{name} muốn chơi lại!",
+  "@gameRematchAsked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "gameRematchWaiting": "Đang chờ {name}…",
+  "@gameRematchWaiting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "gameLeave": "Rời trò chơi",
+  "gameLeaveConfirm": "Rời lúc này sẽ tính là thua. Bạn chắc chứ?",
+  "gameBackToChat": "Về đoạn chat",
+  "gamePeerOffline": "{name} đang kết nối lại…",
+  "@gamePeerOffline": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "gameScoreLine": "Điểm",
+  "gameNoteWin": "{name} thắng",
+  "@gameNoteWin": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "tdTruth": "Thật",
+  "tdDare": "Thách",
+  "tdSpin": "Quay ngẫu nhiên",
+  "tdDone": "Đã làm ✓",
+  "tdSkip": "Bỏ qua",
+  "tdRound": "Lượt {round}/{total}",
+  "@tdRound": {
+    "placeholders": {
+      "round": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "tdChoose": "Chọn Thật hay Thách",
+  "tdWaiting": "{name} đang chọn…",
+  "@tdWaiting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "tdAnswering": "{name} đang trả lời…",
+  "@tdAnswering": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "tdBrave": "Dũng cảm {count}",
+  "@tdBrave": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "kmYourAnswer": "Câu trả lời của bạn",
+  "kmGuess": "Bạn đoán {name} chọn",
+  "@kmGuess": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "kmSubmit": "Gửi câu trả lời",
+  "kmWaiting": "Chờ {name} trả lời…",
+  "@kmWaiting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "kmNext": "Câu tiếp theo",
+  "kmSeeResult": "Xem kết quả",
+  "kmQuestion": "Câu {index}/{count}",
+  "@kmQuestion": {
+    "placeholders": {
+      "index": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "kmCompat": "Độ hợp nhau",
+  "kmTier1": "Tri kỷ 💞",
+  "kmTier2": "Rất hợp nhau 💜",
+  "kmTier3": "Đang tìm hiểu 🌱",
+  "kmTier4": "Trái dấu hút nhau ⚡",
+  "kmRight": "Đoán đúng",
+  "kmWrong": "Đoán trật",
+  "kmPicked": "{name} chọn",
+  "@kmPicked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "kmKnows": "{name} hiểu bạn {count}/{total}",
+  "@kmKnows": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "caroYouAre": "Bạn cầm {mark}",
+  "@caroYouAre": {
+    "placeholders": {
+      "mark": {
+        "type": "String"
+      }
+    }
+  },
+  "drawYourWord": "Bạn vẽ",
+  "drawGuessHint": "Đoán xem {name} đang vẽ gì",
+  "@drawGuessHint": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "drawGuessPlaceholder": "Nhập dự đoán…",
+  "drawCorrect": "{name} đoán đúng!",
+  "@drawCorrect": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "drawTimeUp": "Hết giờ!",
+  "drawAnswer": "Đáp án: {word}",
+  "@drawAnswer": {
+    "placeholders": {
+      "word": {
+        "type": "String"
+      }
+    }
+  },
+  "drawRound": "Vòng {round}/{total}",
+  "@drawRound": {
+    "placeholders": {
+      "round": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "drawClear": "Xoá",
+  "drawPeerDrawing": "{name} đang vẽ",
+  "@drawPeerDrawing": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "drawYouGuess": "Bạn đoán",
+  "gamePreview": "🎮 {game}",
+  "@gamePreview": {
+    "placeholders": {
+      "game": {
+        "type": "String"
+      }
+    }
+  }
 }

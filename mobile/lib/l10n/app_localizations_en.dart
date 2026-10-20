@@ -874,4 +874,272 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get offlineHint =>
       'Can\'t reach the server. Check your connection or change the server address.';
+
+  @override
+  String get games => 'Games';
+
+  @override
+  String gamePickTitle(String name) {
+    return 'Play with $name';
+  }
+
+  @override
+  String get gameTruthDare => 'Truth or Dare';
+
+  @override
+  String get gameTruthDareDesc => 'Spin, answer honestly or take a dare';
+
+  @override
+  String get gameKnowMe => 'Who Knows Who';
+
+  @override
+  String get gameKnowMeDesc =>
+      'Guess each other\'s answers and see your match %';
+
+  @override
+  String get gameCaro => 'Caro (Gomoku)';
+
+  @override
+  String get gameCaroDesc => '15×15 board — first to five in a row wins';
+
+  @override
+  String get gameDraw => 'Draw & Guess';
+
+  @override
+  String get gameDrawDesc =>
+      'One draws, the other guesses before time runs out';
+
+  @override
+  String gameInviteSent(String name) {
+    return 'Waiting for $name to accept…';
+  }
+
+  @override
+  String gameDeclined(String name) {
+    return '$name can\'t play right now';
+  }
+
+  @override
+  String gameInvitedYou(String name) {
+    return '$name invites you to play';
+  }
+
+  @override
+  String get gameAccept => 'Let\'s play';
+
+  @override
+  String get gameDecline => 'Not now';
+
+  @override
+  String get gameCancel => 'Cancel invite';
+
+  @override
+  String get gameYourTurn => 'Your turn';
+
+  @override
+  String gamePeerTurn(String name) {
+    return '$name\'s turn';
+  }
+
+  @override
+  String get gameYouWin => 'You win! 🎉';
+
+  @override
+  String gamePeerWins(String name) {
+    return '$name wins!';
+  }
+
+  @override
+  String get gameTie => 'It\'s a tie 🤝';
+
+  @override
+  String gameForfeit(String name) {
+    return '$name left the game';
+  }
+
+  @override
+  String gameAbandoned(String name) {
+    return '$name lost connection';
+  }
+
+  @override
+  String get gameRematch => 'Rematch';
+
+  @override
+  String gameRematchAsked(String name) {
+    return '$name wants a rematch!';
+  }
+
+  @override
+  String gameRematchWaiting(String name) {
+    return 'Waiting for $name…';
+  }
+
+  @override
+  String get gameLeave => 'Leave game';
+
+  @override
+  String get gameLeaveConfirm => 'Leaving now counts as a loss. Are you sure?';
+
+  @override
+  String get gameBackToChat => 'Back to chat';
+
+  @override
+  String gamePeerOffline(String name) {
+    return '$name is reconnecting…';
+  }
+
+  @override
+  String get gameScoreLine => 'Score';
+
+  @override
+  String gameNoteWin(String name) {
+    return '$name won';
+  }
+
+  @override
+  String get tdTruth => 'Truth';
+
+  @override
+  String get tdDare => 'Dare';
+
+  @override
+  String get tdSpin => 'Spin';
+
+  @override
+  String get tdDone => 'Done ✓';
+
+  @override
+  String get tdSkip => 'Skip';
+
+  @override
+  String tdRound(String round, String total) {
+    return 'Round $round/$total';
+  }
+
+  @override
+  String get tdChoose => 'Pick truth or dare';
+
+  @override
+  String tdWaiting(String name) {
+    return '$name is choosing…';
+  }
+
+  @override
+  String tdAnswering(String name) {
+    return '$name is answering…';
+  }
+
+  @override
+  String tdBrave(String count) {
+    return 'Brave $count';
+  }
+
+  @override
+  String get kmYourAnswer => 'Your answer';
+
+  @override
+  String kmGuess(String name) {
+    return 'Your guess for $name';
+  }
+
+  @override
+  String get kmSubmit => 'Submit';
+
+  @override
+  String kmWaiting(String name) {
+    return 'Waiting for $name…';
+  }
+
+  @override
+  String get kmNext => 'Next question';
+
+  @override
+  String get kmSeeResult => 'See result';
+
+  @override
+  String kmQuestion(String index, String count) {
+    return 'Question $index/$count';
+  }
+
+  @override
+  String get kmCompat => 'Compatibility';
+
+  @override
+  String get kmTier1 => 'Soulmates 💞';
+
+  @override
+  String get kmTier2 => 'Great match 💜';
+
+  @override
+  String get kmTier3 => 'Getting there 🌱';
+
+  @override
+  String get kmTier4 => 'Opposites attract ⚡';
+
+  @override
+  String get kmRight => 'Guessed right';
+
+  @override
+  String get kmWrong => 'Missed';
+
+  @override
+  String kmPicked(String name) {
+    return '$name picked';
+  }
+
+  @override
+  String kmKnows(String name, String count, String total) {
+    return '$name knows you $count/$total';
+  }
+
+  @override
+  String caroYouAre(String mark) {
+    return 'You play $mark';
+  }
+
+  @override
+  String get drawYourWord => 'You draw';
+
+  @override
+  String drawGuessHint(String name) {
+    return 'Guess what $name is drawing';
+  }
+
+  @override
+  String get drawGuessPlaceholder => 'Type a guess…';
+
+  @override
+  String drawCorrect(String name) {
+    return '$name got it!';
+  }
+
+  @override
+  String get drawTimeUp => 'Time\'s up!';
+
+  @override
+  String drawAnswer(String word) {
+    return 'The word was: $word';
+  }
+
+  @override
+  String drawRound(String round, String total) {
+    return 'Round $round/$total';
+  }
+
+  @override
+  String get drawClear => 'Clear';
+
+  @override
+  String drawPeerDrawing(String name) {
+    return '$name is drawing';
+  }
+
+  @override
+  String get drawYouGuess => 'You guess';
+
+  @override
+  String gamePreview(String game) {
+    return '🎮 $game';
+  }
 }

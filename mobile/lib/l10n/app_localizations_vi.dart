@@ -881,4 +881,273 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get offlineHint =>
       'Không kết nối được máy chủ. Kiểm tra mạng hoặc đổi địa chỉ máy chủ.';
+
+  @override
+  String get games => 'Trò chơi';
+
+  @override
+  String gamePickTitle(String name) {
+    return 'Chơi cùng $name';
+  }
+
+  @override
+  String get gameTruthDare => 'Thật hay Thách';
+
+  @override
+  String get gameTruthDareDesc =>
+      'Quay vòng, trả lời thật lòng hoặc nhận thử thách';
+
+  @override
+  String get gameKnowMe => 'Ai hiểu ai hơn';
+
+  @override
+  String get gameKnowMeDesc =>
+      'Đoán câu trả lời của nhau, xem hai bạn hợp bao nhiêu %';
+
+  @override
+  String get gameCaro => 'Cờ caro';
+
+  @override
+  String get gameCaroDesc => 'Bàn 15×15 — ai nối được 5 quân trước thì thắng';
+
+  @override
+  String get gameDraw => 'Vẽ đoán hình';
+
+  @override
+  String get gameDrawDesc =>
+      'Một người vẽ, người kia đoán từ trước khi hết giờ';
+
+  @override
+  String gameInviteSent(String name) {
+    return 'Đang chờ $name chấp nhận…';
+  }
+
+  @override
+  String gameDeclined(String name) {
+    return '$name chưa muốn chơi lúc này';
+  }
+
+  @override
+  String gameInvitedYou(String name) {
+    return '$name mời bạn chơi';
+  }
+
+  @override
+  String get gameAccept => 'Chơi luôn';
+
+  @override
+  String get gameDecline => 'Để sau';
+
+  @override
+  String get gameCancel => 'Huỷ lời mời';
+
+  @override
+  String get gameYourTurn => 'Lượt của bạn';
+
+  @override
+  String gamePeerTurn(String name) {
+    return 'Lượt của $name';
+  }
+
+  @override
+  String get gameYouWin => 'Bạn thắng! 🎉';
+
+  @override
+  String gamePeerWins(String name) {
+    return '$name thắng!';
+  }
+
+  @override
+  String get gameTie => 'Hoà nhau 🤝';
+
+  @override
+  String gameForfeit(String name) {
+    return '$name đã rời trò chơi';
+  }
+
+  @override
+  String gameAbandoned(String name) {
+    return '$name mất kết nối quá lâu';
+  }
+
+  @override
+  String get gameRematch => 'Chơi lại';
+
+  @override
+  String gameRematchAsked(String name) {
+    return '$name muốn chơi lại!';
+  }
+
+  @override
+  String gameRematchWaiting(String name) {
+    return 'Đang chờ $name…';
+  }
+
+  @override
+  String get gameLeave => 'Rời trò chơi';
+
+  @override
+  String get gameLeaveConfirm => 'Rời lúc này sẽ tính là thua. Bạn chắc chứ?';
+
+  @override
+  String get gameBackToChat => 'Về đoạn chat';
+
+  @override
+  String gamePeerOffline(String name) {
+    return '$name đang kết nối lại…';
+  }
+
+  @override
+  String get gameScoreLine => 'Điểm';
+
+  @override
+  String gameNoteWin(String name) {
+    return '$name thắng';
+  }
+
+  @override
+  String get tdTruth => 'Thật';
+
+  @override
+  String get tdDare => 'Thách';
+
+  @override
+  String get tdSpin => 'Quay ngẫu nhiên';
+
+  @override
+  String get tdDone => 'Đã làm ✓';
+
+  @override
+  String get tdSkip => 'Bỏ qua';
+
+  @override
+  String tdRound(String round, String total) {
+    return 'Lượt $round/$total';
+  }
+
+  @override
+  String get tdChoose => 'Chọn Thật hay Thách';
+
+  @override
+  String tdWaiting(String name) {
+    return '$name đang chọn…';
+  }
+
+  @override
+  String tdAnswering(String name) {
+    return '$name đang trả lời…';
+  }
+
+  @override
+  String tdBrave(String count) {
+    return 'Dũng cảm $count';
+  }
+
+  @override
+  String get kmYourAnswer => 'Câu trả lời của bạn';
+
+  @override
+  String kmGuess(String name) {
+    return 'Bạn đoán $name chọn';
+  }
+
+  @override
+  String get kmSubmit => 'Gửi câu trả lời';
+
+  @override
+  String kmWaiting(String name) {
+    return 'Chờ $name trả lời…';
+  }
+
+  @override
+  String get kmNext => 'Câu tiếp theo';
+
+  @override
+  String get kmSeeResult => 'Xem kết quả';
+
+  @override
+  String kmQuestion(String index, String count) {
+    return 'Câu $index/$count';
+  }
+
+  @override
+  String get kmCompat => 'Độ hợp nhau';
+
+  @override
+  String get kmTier1 => 'Tri kỷ 💞';
+
+  @override
+  String get kmTier2 => 'Rất hợp nhau 💜';
+
+  @override
+  String get kmTier3 => 'Đang tìm hiểu 🌱';
+
+  @override
+  String get kmTier4 => 'Trái dấu hút nhau ⚡';
+
+  @override
+  String get kmRight => 'Đoán đúng';
+
+  @override
+  String get kmWrong => 'Đoán trật';
+
+  @override
+  String kmPicked(String name) {
+    return '$name chọn';
+  }
+
+  @override
+  String kmKnows(String name, String count, String total) {
+    return '$name hiểu bạn $count/$total';
+  }
+
+  @override
+  String caroYouAre(String mark) {
+    return 'Bạn cầm $mark';
+  }
+
+  @override
+  String get drawYourWord => 'Bạn vẽ';
+
+  @override
+  String drawGuessHint(String name) {
+    return 'Đoán xem $name đang vẽ gì';
+  }
+
+  @override
+  String get drawGuessPlaceholder => 'Nhập dự đoán…';
+
+  @override
+  String drawCorrect(String name) {
+    return '$name đoán đúng!';
+  }
+
+  @override
+  String get drawTimeUp => 'Hết giờ!';
+
+  @override
+  String drawAnswer(String word) {
+    return 'Đáp án: $word';
+  }
+
+  @override
+  String drawRound(String round, String total) {
+    return 'Vòng $round/$total';
+  }
+
+  @override
+  String get drawClear => 'Xoá';
+
+  @override
+  String drawPeerDrawing(String name) {
+    return '$name đang vẽ';
+  }
+
+  @override
+  String get drawYouGuess => 'Bạn đoán';
+
+  @override
+  String gamePreview(String game) {
+    return '🎮 $game';
+  }
 }

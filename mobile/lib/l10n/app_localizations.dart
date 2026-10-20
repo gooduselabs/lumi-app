@@ -1717,6 +1717,426 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Không kết nối được máy chủ. Kiểm tra mạng hoặc đổi địa chỉ máy chủ.'**
   String get offlineHint;
+
+  /// No description provided for @games.
+  ///
+  /// In vi, this message translates to:
+  /// **'Trò chơi'**
+  String get games;
+
+  /// No description provided for @gamePickTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chơi cùng {name}'**
+  String gamePickTitle(String name);
+
+  /// No description provided for @gameTruthDare.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thật hay Thách'**
+  String get gameTruthDare;
+
+  /// No description provided for @gameTruthDareDesc.
+  ///
+  /// In vi, this message translates to:
+  /// **'Quay vòng, trả lời thật lòng hoặc nhận thử thách'**
+  String get gameTruthDareDesc;
+
+  /// No description provided for @gameKnowMe.
+  ///
+  /// In vi, this message translates to:
+  /// **'Ai hiểu ai hơn'**
+  String get gameKnowMe;
+
+  /// No description provided for @gameKnowMeDesc.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đoán câu trả lời của nhau, xem hai bạn hợp bao nhiêu %'**
+  String get gameKnowMeDesc;
+
+  /// No description provided for @gameCaro.
+  ///
+  /// In vi, this message translates to:
+  /// **'Cờ caro'**
+  String get gameCaro;
+
+  /// No description provided for @gameCaroDesc.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bàn 15×15 — ai nối được 5 quân trước thì thắng'**
+  String get gameCaroDesc;
+
+  /// No description provided for @gameDraw.
+  ///
+  /// In vi, this message translates to:
+  /// **'Vẽ đoán hình'**
+  String get gameDraw;
+
+  /// No description provided for @gameDrawDesc.
+  ///
+  /// In vi, this message translates to:
+  /// **'Một người vẽ, người kia đoán từ trước khi hết giờ'**
+  String get gameDrawDesc;
+
+  /// No description provided for @gameInviteSent.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đang chờ {name} chấp nhận…'**
+  String gameInviteSent(String name);
+
+  /// No description provided for @gameDeclined.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name} chưa muốn chơi lúc này'**
+  String gameDeclined(String name);
+
+  /// No description provided for @gameInvitedYou.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name} mời bạn chơi'**
+  String gameInvitedYou(String name);
+
+  /// No description provided for @gameAccept.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chơi luôn'**
+  String get gameAccept;
+
+  /// No description provided for @gameDecline.
+  ///
+  /// In vi, this message translates to:
+  /// **'Để sau'**
+  String get gameDecline;
+
+  /// No description provided for @gameCancel.
+  ///
+  /// In vi, this message translates to:
+  /// **'Huỷ lời mời'**
+  String get gameCancel;
+
+  /// No description provided for @gameYourTurn.
+  ///
+  /// In vi, this message translates to:
+  /// **'Lượt của bạn'**
+  String get gameYourTurn;
+
+  /// No description provided for @gamePeerTurn.
+  ///
+  /// In vi, this message translates to:
+  /// **'Lượt của {name}'**
+  String gamePeerTurn(String name);
+
+  /// No description provided for @gameYouWin.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bạn thắng! 🎉'**
+  String get gameYouWin;
+
+  /// No description provided for @gamePeerWins.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name} thắng!'**
+  String gamePeerWins(String name);
+
+  /// No description provided for @gameTie.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hoà nhau 🤝'**
+  String get gameTie;
+
+  /// No description provided for @gameForfeit.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name} đã rời trò chơi'**
+  String gameForfeit(String name);
+
+  /// No description provided for @gameAbandoned.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name} mất kết nối quá lâu'**
+  String gameAbandoned(String name);
+
+  /// No description provided for @gameRematch.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chơi lại'**
+  String get gameRematch;
+
+  /// No description provided for @gameRematchAsked.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name} muốn chơi lại!'**
+  String gameRematchAsked(String name);
+
+  /// No description provided for @gameRematchWaiting.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đang chờ {name}…'**
+  String gameRematchWaiting(String name);
+
+  /// No description provided for @gameLeave.
+  ///
+  /// In vi, this message translates to:
+  /// **'Rời trò chơi'**
+  String get gameLeave;
+
+  /// No description provided for @gameLeaveConfirm.
+  ///
+  /// In vi, this message translates to:
+  /// **'Rời lúc này sẽ tính là thua. Bạn chắc chứ?'**
+  String get gameLeaveConfirm;
+
+  /// No description provided for @gameBackToChat.
+  ///
+  /// In vi, this message translates to:
+  /// **'Về đoạn chat'**
+  String get gameBackToChat;
+
+  /// No description provided for @gamePeerOffline.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name} đang kết nối lại…'**
+  String gamePeerOffline(String name);
+
+  /// No description provided for @gameScoreLine.
+  ///
+  /// In vi, this message translates to:
+  /// **'Điểm'**
+  String get gameScoreLine;
+
+  /// No description provided for @gameNoteWin.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name} thắng'**
+  String gameNoteWin(String name);
+
+  /// No description provided for @tdTruth.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thật'**
+  String get tdTruth;
+
+  /// No description provided for @tdDare.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thách'**
+  String get tdDare;
+
+  /// No description provided for @tdSpin.
+  ///
+  /// In vi, this message translates to:
+  /// **'Quay ngẫu nhiên'**
+  String get tdSpin;
+
+  /// No description provided for @tdDone.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã làm ✓'**
+  String get tdDone;
+
+  /// No description provided for @tdSkip.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bỏ qua'**
+  String get tdSkip;
+
+  /// No description provided for @tdRound.
+  ///
+  /// In vi, this message translates to:
+  /// **'Lượt {round}/{total}'**
+  String tdRound(String round, String total);
+
+  /// No description provided for @tdChoose.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chọn Thật hay Thách'**
+  String get tdChoose;
+
+  /// No description provided for @tdWaiting.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name} đang chọn…'**
+  String tdWaiting(String name);
+
+  /// No description provided for @tdAnswering.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name} đang trả lời…'**
+  String tdAnswering(String name);
+
+  /// No description provided for @tdBrave.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dũng cảm {count}'**
+  String tdBrave(String count);
+
+  /// No description provided for @kmYourAnswer.
+  ///
+  /// In vi, this message translates to:
+  /// **'Câu trả lời của bạn'**
+  String get kmYourAnswer;
+
+  /// No description provided for @kmGuess.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bạn đoán {name} chọn'**
+  String kmGuess(String name);
+
+  /// No description provided for @kmSubmit.
+  ///
+  /// In vi, this message translates to:
+  /// **'Gửi câu trả lời'**
+  String get kmSubmit;
+
+  /// No description provided for @kmWaiting.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chờ {name} trả lời…'**
+  String kmWaiting(String name);
+
+  /// No description provided for @kmNext.
+  ///
+  /// In vi, this message translates to:
+  /// **'Câu tiếp theo'**
+  String get kmNext;
+
+  /// No description provided for @kmSeeResult.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xem kết quả'**
+  String get kmSeeResult;
+
+  /// No description provided for @kmQuestion.
+  ///
+  /// In vi, this message translates to:
+  /// **'Câu {index}/{count}'**
+  String kmQuestion(String index, String count);
+
+  /// No description provided for @kmCompat.
+  ///
+  /// In vi, this message translates to:
+  /// **'Độ hợp nhau'**
+  String get kmCompat;
+
+  /// No description provided for @kmTier1.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tri kỷ 💞'**
+  String get kmTier1;
+
+  /// No description provided for @kmTier2.
+  ///
+  /// In vi, this message translates to:
+  /// **'Rất hợp nhau 💜'**
+  String get kmTier2;
+
+  /// No description provided for @kmTier3.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đang tìm hiểu 🌱'**
+  String get kmTier3;
+
+  /// No description provided for @kmTier4.
+  ///
+  /// In vi, this message translates to:
+  /// **'Trái dấu hút nhau ⚡'**
+  String get kmTier4;
+
+  /// No description provided for @kmRight.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đoán đúng'**
+  String get kmRight;
+
+  /// No description provided for @kmWrong.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đoán trật'**
+  String get kmWrong;
+
+  /// No description provided for @kmPicked.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name} chọn'**
+  String kmPicked(String name);
+
+  /// No description provided for @kmKnows.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name} hiểu bạn {count}/{total}'**
+  String kmKnows(String name, String count, String total);
+
+  /// No description provided for @caroYouAre.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bạn cầm {mark}'**
+  String caroYouAre(String mark);
+
+  /// No description provided for @drawYourWord.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bạn vẽ'**
+  String get drawYourWord;
+
+  /// No description provided for @drawGuessHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đoán xem {name} đang vẽ gì'**
+  String drawGuessHint(String name);
+
+  /// No description provided for @drawGuessPlaceholder.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nhập dự đoán…'**
+  String get drawGuessPlaceholder;
+
+  /// No description provided for @drawCorrect.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name} đoán đúng!'**
+  String drawCorrect(String name);
+
+  /// No description provided for @drawTimeUp.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hết giờ!'**
+  String get drawTimeUp;
+
+  /// No description provided for @drawAnswer.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đáp án: {word}'**
+  String drawAnswer(String word);
+
+  /// No description provided for @drawRound.
+  ///
+  /// In vi, this message translates to:
+  /// **'Vòng {round}/{total}'**
+  String drawRound(String round, String total);
+
+  /// No description provided for @drawClear.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xoá'**
+  String get drawClear;
+
+  /// No description provided for @drawPeerDrawing.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name} đang vẽ'**
+  String drawPeerDrawing(String name);
+
+  /// No description provided for @drawYouGuess.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bạn đoán'**
+  String get drawYouGuess;
+
+  /// No description provided for @gamePreview.
+  ///
+  /// In vi, this message translates to:
+  /// **'🎮 {game}'**
+  String gamePreview(String game);
 }
 
 class _AppLocalizationsDelegate

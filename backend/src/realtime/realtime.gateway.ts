@@ -7,6 +7,7 @@ import { MatchMode } from '@prisma/client';
 import type { Server, Socket } from 'socket.io';
 import { AuthService } from '../auth/auth.service';
 import { ChatService } from '../chat/chat.service';
+import { GamesService } from '../games/games.service';
 import { MatchService } from '../match/match.service';
 import { GenderPref } from '../match/match.logic';
 import { SocialService } from '../social/social.service';
@@ -39,6 +40,7 @@ export class RealtimeGateway implements OnGatewayInit, OnGatewayConnection, OnGa
     private readonly chat: ChatService,
     private readonly social: SocialService,
     private readonly users: UsersService,
+    private readonly games: GamesService,
   ) {}
 
   afterInit(server: Server) {
@@ -53,6 +55,8 @@ export class RealtimeGateway implements OnGatewayInit, OnGatewayConnection, OnGa
       const { id } = await this.auth.verifyAccessToken(token);
       socket.data.userId = id;
       socket.data.bucket = new Bucket(20, 5000);
+      // Drawing streams many small stroke batches.
+      socket.data.drawBucket = new Bucket(120, 5000);
       const wasOnline = this.rt.isOnline(id);
       await socket.join(userRoom(id));
       socket.emit('ready', { userId: id });
@@ -61,6 +65,7 @@ export class RealtimeGateway implements OnGatewayInit, OnGatewayConnection, OnGa
         .pending(id)
         .then((p) => p.items.length && socket.emit('chat:pending', p))
         .catch((e) => this.logger.error(e));
+      this.games.onOnline(id);
       if (!wasOnline) void this.broadcastPresence(id, true);
     } catch {
       socket.emit('auth_error', { code: 'UNAUTHORIZED' });
@@ -72,6 +77,7 @@ export class RealtimeGateway implements OnGatewayInit, OnGatewayConnection, OnGa
     const id: string | undefined = socket.data.userId;
     if (!id || this.rt.isOnline(id)) return;
     void this.users.touch(id);
+    this.games.onOffline(id);
     void this.broadcastPresence(id, false);
     await this.match.onOffline(id).catch((e) => this.logger.error(e));
   }
@@ -81,10 +87,10 @@ export class RealtimeGateway implements OnGatewayInit, OnGatewayConnection, OnGa
     for (const f of friends) this.rt.toUser(f, 'presence:update', { userId, online, at: new Date() });
   }
 
-  private async run<T>(socket: Socket, fn: (userId: string) => Promise<T>): Promise<Ack<T>> {
+  private async run<T>(socket: Socket, fn: (userId: string) => Promise<T> | T, bucket = 'bucket'): Promise<Ack<T>> {
     const userId: string | undefined = socket.data.userId;
     if (!userId) return { ok: false, code: 'UNAUTHORIZED', message: 'Unauthorized' };
-    if (!(socket.data.bucket as Bucket).take()) return { ok: false, code: 'RATE_LIMITED', message: 'Slow down' };
+    if (!(socket.data[bucket] as Bucket).take()) return { ok: false, code: 'RATE_LIMITED', message: 'Slow down' };
     try {
       return { ok: true, data: await fn(userId) };
     } catch (e) {
@@ -154,5 +160,42 @@ export class RealtimeGateway implements OnGatewayInit, OnGatewayConnection, OnGa
   @SubscribeMessage('chat:read')
   chatRead(@ConnectedSocket() s: Socket, @MessageBody() b: { conversationId: string }) {
     return this.run(s, (uid) => this.chat.markRead(uid, String(b?.conversationId)));
+  }
+
+  // ---------- couple mini-games ----------
+  @SubscribeMessage('game:invite')
+  gameInvite(@ConnectedSocket() s: Socket, @MessageBody() b: { conversationId: string; kind: string }) {
+    return this.run(s, (uid) => this.games.invite(uid, String(b?.conversationId), String(b?.kind)));
+  }
+
+  @SubscribeMessage('game:cancel')
+  gameCancel(@ConnectedSocket() s: Socket, @MessageBody() b: { inviteId: string }) {
+    return this.run(s, (uid) => this.games.cancelInvite(uid, String(b?.inviteId)));
+  }
+
+  @SubscribeMessage('game:respond')
+  gameRespond(@ConnectedSocket() s: Socket, @MessageBody() b: { inviteId: string; accept: boolean }) {
+    return this.run(s, (uid) => this.games.respond(uid, String(b?.inviteId), b?.accept === true));
+  }
+
+  @SubscribeMessage('game:action')
+  gameAction(@ConnectedSocket() s: Socket, @MessageBody() b: { gameId: string; action: Record<string, unknown> }) {
+    const stroke = b?.action?.type === 'stroke';
+    return this.run(s, (uid) => this.games.act(uid, String(b?.gameId), b?.action ?? {}), stroke ? 'drawBucket' : 'bucket');
+  }
+
+  @SubscribeMessage('game:leave')
+  gameLeave(@ConnectedSocket() s: Socket, @MessageBody() b: { gameId: string }) {
+    return this.run(s, (uid) => this.games.leave(uid, String(b?.gameId)));
+  }
+
+  @SubscribeMessage('game:rematch')
+  gameRematch(@ConnectedSocket() s: Socket, @MessageBody() b: { gameId: string }) {
+    return this.run(s, (uid) => this.games.rematch(uid, String(b?.gameId)));
+  }
+
+  @SubscribeMessage('game:get')
+  gameGet(@ConnectedSocket() s: Socket, @MessageBody() b: { gameId?: string }) {
+    return this.run(s, (uid) => (b?.gameId ? this.games.get(uid, String(b.gameId)) : this.games.current(uid)));
   }
 }

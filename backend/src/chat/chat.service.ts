@@ -225,6 +225,30 @@ export class ChatService {
     return this.persist(userId, other.userId, conversationId, { body: text, clientId }, text.slice(0, 100));
   }
 
+  /** The other member of a friend conversation (throws if not friends / blocked). */
+  async friendPeer(userId: string, conversationId: string): Promise<string> {
+    return (await this.canSend(userId, conversationId)).other.userId;
+  }
+
+  /** Posts a SYSTEM note (e.g. a game result) queued for both members. */
+  async postSystem(conversationId: string, senderId: string, body: string) {
+    const conv = await this.prisma.conversation.findUnique({ where: { id: conversationId }, include: { members: true } });
+    if (!conv) throw Errors.notFound('Conversation');
+    const expiresAt = new Date(Date.now() + this.env.messageTtlDays * 86_400_000);
+    const rows = await this.prisma.$transaction([
+      ...conv.members.map((m) =>
+        this.prisma.message.create({
+          data: { conversationId, senderId, recipientId: m.userId, expiresAt, type: 'SYSTEM', body: body.slice(0, 4000) },
+          include: { attachment: true },
+        }),
+      ),
+      this.prisma.conversation.update({ where: { id: conversationId }, data: { lastMessageAt: new Date() } }),
+    ]);
+    for (const r of rows.slice(0, conv.members.length) as (Message & { attachment: Attachment | null })[]) {
+      this.rt.toUser(r.recipientId, 'chat:message', this.dto(r));
+    }
+  }
+
   private async canSend(userId: string, conversationId: string) {
     const { conv, other } = await this.membership(userId, conversationId);
     if (!conv.friendship) throw Errors.forbidden('Not friends');

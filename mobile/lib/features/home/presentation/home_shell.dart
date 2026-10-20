@@ -10,6 +10,8 @@ import '../../../core/realtime/socket_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../call/application/call_controller.dart';
 import '../../chat/application/conversations_controller.dart';
+import '../../games/application/games_controller.dart';
+import '../../games/presentation/game_picker_sheet.dart';
 
 class HomeShell extends ConsumerWidget {
   const HomeShell({super.key, required this.shell});
@@ -23,6 +25,15 @@ class HomeShell extends ConsumerWidget {
     // Incoming friend call -> full-screen call UI.
     ref.listen(callControllerProvider.select((c) => c.phase), (prev, next) {
       if (next == CallPhase.incoming && prev != CallPhase.incoming) context.push('/call');
+    });
+    // Couple mini-games: incoming invites pop a dialog, a newly started game opens the game screen.
+    ref.listen(gamesControllerProvider.select((g) => g.incoming.lastOrNull?.inviteId), (prev, next) {
+      final inv = ref.read(gamesControllerProvider).incoming.lastOrNull;
+      if (next != null && next != prev && inv != null) showGameInviteDialog(context, ref, inv);
+    });
+    ref.listen(gamesControllerProvider.select((g) => (g.game?.id, g.game?.ended ?? true)), (prev, next) {
+      final (id, ended) = next;
+      if (id != null && !ended && id != prev?.$1 && GoRouter.of(context).routerDelegate.currentConfiguration.uri.path != '/game') context.push('/game');
     });
     final items = [
       (Icons.explore_outlined, Icons.explore_rounded, l.tabDiscover),

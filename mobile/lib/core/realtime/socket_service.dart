@@ -32,6 +32,8 @@ class SocketService {
     'chat:message', 'chat:typing', 'chat:read', 'chat:pending', 'chat:delivered',
     'presence:update', 'friends:changed',
     'call:incoming', 'call:accepted', 'call:ended',
+    'game:invite', 'game:invite_expired', 'game:declined', 'game:started', 'game:state', 'game:ended',
+    'game:stroke', 'game:rematch', 'game:peer',
   ];
 
   Stream<SocketEvent> get events => _events.stream;

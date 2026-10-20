@@ -153,3 +153,13 @@ mobile/    Flutter (lib/core, lib/features/<feature>/{domain,data,application,pr
 docs/      KE-HOACH.md/.docx, screenshots, smoke-test output
 design/    script tạo icon
 ```
+
+## Mini-games (v1.3.0)
+
+Couple mini-games launched from a 1-1 friend chat (🎮 button): **Thật hay Thách**, **Ai hiểu ai hơn**, **Cờ caro 15×15**, **Vẽ đoán hình**.
+
+- Server-authoritative over Socket.IO. Client → server: `game:invite`, `game:cancel`, `game:respond`, `game:action`, `game:leave`, `game:rematch`, `game:get`. Server → client: `game:invite`, `game:invite_expired`, `game:declined`, `game:started`, `game:state`, `game:stroke`, `game:peer`, `game:rematch`, `game:ended`.
+- Invites expire after 60 s; one game per user at a time (`GAME_BUSY`). A player offline for 45 s forfeits.
+- Results are posted to the chat as system messages (`GAME:{json}`) and rendered as result cards.
+- Caveat: live game state is in memory, so restarting the API ends games in progress.
+- Screenshots: `dist/screenshots/v3/`.

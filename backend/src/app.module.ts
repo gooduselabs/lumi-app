@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { ChatModule } from './chat/chat.module';
 import { AppConfigModule } from './config/config.module';
 import { FeedModule } from './feed/feed.module';
+import { GamesModule } from './games/games.module';
 import { HealthController } from './health/health.controller';
 import { MailModule } from './mail/mail.module';
 import { MatchModule } from './match/match.module';
@@ -36,6 +37,7 @@ import { UsersModule } from './users/users.module';
     VoiceModule,
     MatchModule,
     FeedModule,
+    GamesModule,
     RealtimeGatewayModule,
   ],
   controllers: [HealthController],

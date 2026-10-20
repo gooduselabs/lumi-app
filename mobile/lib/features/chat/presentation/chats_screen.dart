@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+
+import '../../../l10n/app_localizations.dart';
+import '../../games/domain/game_models.dart';
+import '../../games/presentation/game_common.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -102,7 +106,7 @@ class _ConversationTile extends StatelessWidget {
     final preview = last == null
         ? ''
         : last.isSystem
-            ? l.systemMatched
+            ? _systemPreview(l, last.body)
             : '${last.senderId == meId ? '${l.you}: ' : ''}${switch (last.type) {
                 'IMAGE' => '📷 ${l.photoMessage}',
                 'VOICE' => '🎤 ${l.voiceMessage}',
@@ -204,4 +208,9 @@ class _FriendList extends ConsumerWidget {
       ),
     );
   }
+}
+
+String _systemPreview(AppLocalizations l, String body) {
+  final r = GameResult.fromSystemBody(body);
+  return r == null ? l.systemMatched : l.gamePreview(r.kind.title(l));
 }
