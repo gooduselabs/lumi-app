@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      api_base_url:
+        description: "API base URL baked into the mobile builds"
+        required: false
+        default: "http://10.0.2.2:3000"
+
+env:
+  FLUTTER_VERSION: "3.47.7"
+  # Priority: manual input > repo variable API_BASE_URL > emulator default
+  API_BASE_URL: ${{ github.event.inputs.api_base_url || vars.API_BASE_URL || 'http://10.0.2.2:3000' }}
+
+jobs:
+  backend:
+    name: Backend tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env: { POSTGRES_USER: lumi, POSTGRES_PASSWORD: lumi, POSTGRES_DB: lumi_test }
+        ports: ["5432:5432"]
+        options: --health-cmd "pg_isready -U lumi" --health-interval 5s --health-retries 10
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+    defaults: { run: { working-directory: backend } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: npm, cache-dependency-path: backend/package-lock.json }
+      - run: npm ci
+      - run: npx prisma generate
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+
+  android:
+    name: Android APK
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: mobile } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: "21" }
+      - uses: subosito/flutter-action@v2
+        with: { flutter-version: "${{ env.FLUTTER_VERSION }}", channel: stable, cache: true }
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
+      - name: Build release APK
+        # Signed with debug keys in CI unless a key.properties is provided via secrets.
+        run: flutter build apk --release --dart-define=API_BASE_URL=$API_BASE_URL
+      - run: mv build/app/outputs/flutter-apk/app-release.apk build/lumi-android.apk
+      - uses: actions/upload-artifact@v4
+        with: { name: lumi-android-apk, path: mobile/build/lumi-android.apk, retention-days: 30 }
+
+  ios:
+    name: iOS (unsigned)
+    runs-on: macos-latest
+    defaults: { run: { working-directory: mobile } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with: { flutter-version: "${{ env.FLUTTER_VERSION }}", channel: stable, cache: true }
+      - run: flutter pub get
+      - name: Build iOS (no codesign)
+        run: flutter build ios --release --no-codesign --dart-define=API_BASE_URL=$API_BASE_URL
+      - name: Package unsigned IPA
+        run: |
+          mkdir -p build/ipa/Payload
+          cp -R build/ios/iphoneos/Runner.app build/ipa/Payload/
+          cd build/ipa && zip -qry ../lumi-ios-unsigned.ipa Payload
+      - uses: actions/upload-artifact@v4
+        with: { name: lumi-ios-unsigned-ipa, path: mobile/build/lumi-ios-unsigned.ipa, retention-days: 30 }
