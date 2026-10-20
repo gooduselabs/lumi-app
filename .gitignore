@@ -8,3 +8,4 @@ key.properties
 dump.rdb
 .api-dev.log
 .livekit-dev.log
+.ngrok.log
