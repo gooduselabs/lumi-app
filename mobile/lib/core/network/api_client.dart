@@ -87,26 +87,43 @@ class ApiClient {
     }
   }
 
+  /// Hard upper bound for any non-upload call, independent of socket-level timeouts
+  /// (which a captive portal / half-open NAT / VPN can defeat). Cancels the request.
+  Duration requestDeadline = const Duration(seconds: 15);
+
   Future<T> get<T>(String path, {Map<String, dynamic>? query}) =>
-      _wrap(() => dio.get<T>(path, queryParameters: query));
+      _wrap((c) => dio.get<T>(path, queryParameters: query, cancelToken: c));
   Future<T> post<T>(String path, {Object? data, bool auth = true}) =>
-      _wrap(() => dio.post<T>(path, data: data ?? {}, options: Options(extra: {'noAuth': !auth})));
-  Future<T> put<T>(String path, {Object? data}) => _wrap(() => dio.put<T>(path, data: data ?? {}));
-  Future<T> patch<T>(String path, {Object? data}) => _wrap(() => dio.patch<T>(path, data: data ?? {}));
-  Future<T> upload<T>(String path, FormData form, {void Function(double)? onProgress}) => _wrap(() => dio.post<T>(
+      _wrap((c) => dio.post<T>(path, data: data ?? {}, options: Options(extra: {'noAuth': !auth}), cancelToken: c));
+  Future<T> put<T>(String path, {Object? data}) => _wrap((c) => dio.put<T>(path, data: data ?? {}, cancelToken: c));
+  Future<T> patch<T>(String path, {Object? data}) => _wrap((c) => dio.patch<T>(path, data: data ?? {}, cancelToken: c));
+  Future<T> upload<T>(String path, FormData form, {void Function(double)? onProgress}) => _wrap(deadline: const Duration(minutes: 3), (c) => dio.post<T>(
         path,
         data: form,
         options: Options(contentType: 'multipart/form-data', sendTimeout: const Duration(minutes: 2), receiveTimeout: const Duration(minutes: 2)),
         onSendProgress: onProgress == null ? null : (s, t) => t > 0 ? onProgress(s / t) : null,
+        cancelToken: c,
       ));
-  Future<T> delete<T>(String path) => _wrap(() => dio.delete<T>(path));
+  Future<T> delete<T>(String path) => _wrap((c) => dio.delete<T>(path, cancelToken: c));
 
-  Future<T> _wrap<T>(Future<Response<T>> Function() call) async {
+  /// Every call completes within [deadline] with data or an [ApiException] — never hangs, never
+  /// leaks a non-API error type to the UI.
+  Future<T> _wrap<T>(Future<Response<T>> Function(CancelToken) call, {Duration? deadline}) async {
+    final cancel = CancelToken();
     try {
-      final r = await call();
-      return r.data as T;
+      final r = await call(cancel).timeout(deadline ?? requestDeadline);
+      final data = r.data;
+      if (data is! T) throw ApiException('BAD_RESPONSE', 'Unexpected server response', status: r.statusCode);
+      return data;
+    } on TimeoutException {
+      cancel.cancel('deadline');
+      throw ApiException('NETWORK', 'Request timed out');
     } on DioException catch (e) {
       throw ApiException.fromDio(e);
+    } on ApiException {
+      rethrow;
+    } catch (e) {
+      throw ApiException('UNKNOWN', '$e');
     }
   }
 }

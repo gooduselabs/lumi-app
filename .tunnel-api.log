@@ -1,0 +1,9 @@
+1792482510600Caught an error:
+Error: connect ETIMEDOUT 198.18.0.1:8083
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1608:16) {
+  errno: -110,
+  code: 'ETIMEDOUT',
+  syscall: 'connect',
+  address: '198.18.0.1',
+  port: 8083
+}

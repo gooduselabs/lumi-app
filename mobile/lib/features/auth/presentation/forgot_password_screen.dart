@@ -33,7 +33,8 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
       final sent = await ref.read(authControllerProvider.notifier).forgot(_email.text.trim().toLowerCase());
       if (!mounted) return;
       context.push(Uri(path: '/reset', queryParameters: {'email': sent.email, 'dev': ?sent.devCode}).toString());
-    } on ApiException catch (e) {
+    } catch (err) {
+      final e = err is ApiException ? err : ApiException('UNKNOWN', '$err');
       if (mounted) showSnack(context, context.l10n.errorText(e), error: true);
     } finally {
       if (mounted) setState(() => _loading = false);
@@ -94,7 +95,8 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
     try {
       await ref.read(authControllerProvider.notifier).resetPassword(widget.email, _code.text, _pw.text);
       if (mounted) showSnack(context, context.l10n.passwordChanged);
-    } on ApiException catch (e) {
+    } catch (err) {
+      final e = err is ApiException ? err : ApiException('UNKNOWN', '$err');
       if (mounted) showSnack(context, context.l10n.errorText(e), error: true);
     } finally {
       if (mounted) setState(() => _loading = false);

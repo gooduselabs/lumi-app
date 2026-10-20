@@ -39,7 +39,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       final sent = await ref.read(authControllerProvider.notifier).register(_email.text.trim().toLowerCase(), _password.text, locale);
       if (!mounted) return;
       context.push(Uri(path: '/verify', queryParameters: {'email': sent.email, 'dev': ?sent.devCode}).toString());
-    } on ApiException catch (e) {
+    } catch (err) {
+      final e = err is ApiException ? err : ApiException('UNKNOWN', '$err');
       if (mounted) showSnack(context, context.l10n.errorText(e), error: true);
     } finally {
       if (mounted) setState(() => _loading = false);

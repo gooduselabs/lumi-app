@@ -33,7 +33,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final email = _email.text.trim().toLowerCase();
     try {
       await ref.read(authControllerProvider.notifier).login(email, _password.text);
-    } on ApiException catch (e) {
+    } catch (err) {
+      final e = err is ApiException ? err : ApiException('UNKNOWN', '$err');
       if (!mounted) return;
       if (e.code == 'EMAIL_NOT_VERIFIED') {
         // The server just emailed a fresh code.

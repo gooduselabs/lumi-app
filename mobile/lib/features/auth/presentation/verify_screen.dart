@@ -59,7 +59,8 @@ class _VerifyScreenState extends ConsumerState<VerifyScreen> {
     try {
       await ref.read(authControllerProvider.notifier).verifyEmail(widget.email, _code.text);
       // Router redirect takes over (onboarding or home).
-    } on ApiException catch (e) {
+    } catch (err) {
+      final e = err is ApiException ? err : ApiException('UNKNOWN', '$err');
       if (!mounted) return;
       setState(() => _error = true);
       showSnack(context, context.l10n.errorText(e), error: true);
@@ -75,7 +76,8 @@ class _VerifyScreenState extends ConsumerState<VerifyScreen> {
       setState(() => _devCode = sent.devCode ?? _devCode);
       _startCooldown(60);
       showSnack(context, context.l10n.codeSent);
-    } on ApiException catch (e) {
+    } catch (err) {
+      final e = err is ApiException ? err : ApiException('UNKNOWN', '$err');
       if (!mounted) return;
       if (e.retryAfter != null) _startCooldown(e.retryAfter!);
       showSnack(context, context.l10n.errorText(e), error: true);

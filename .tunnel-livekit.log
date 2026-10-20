@@ -1,0 +1,62 @@
+2026-10-20T07:44:21Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-10-20T07:44:21Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-10-20T07:44:24Z INF +--------------------------------------------------------------------------------------------+
+2026-10-20T07:44:24Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2026-10-20T07:44:24Z INF |  https://positioning-mia-picking-magazines.trycloudflare.com                               |
+2026-10-20T07:44:24Z INF +--------------------------------------------------------------------------------------------+
+2026-10-20T07:44:24Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
+2026-10-20T07:44:24Z INF Version 2026.10.1 (Checksum 3bfc539f45d2620c71debb7a86be0efa737ed5ccbad9eb85c787116900e5c586)
+2026-10-20T07:44:24Z INF GOOS: linux, GOVersion: go1.27.2, GoArch: amd64
+2026-10-20T07:44:24Z INF Settings: map[ha-connections:1 no-autoupdate:true p:http2 protocol:http2 url:http://localhost:7880]
+2026-10-20T07:44:24Z INF Environmental variables map[SAND_EGRESS_TUNNEL_ENABLED:1 SAND_EGRESS_TUNNEL_PROXY_ADDR:127.0.0.1:8791 SAND_EGRESS_TUNNEL_WS_ADDR:0.0.0.0:8790 SAND_EGRESS_TUNNEL_WS_PORT:8790]
+2026-10-20T07:44:24Z ERR Failed to fetch features, default to disable error="lookup cfd-features.argotunnel.com on 198.18.0.53:53: no such host"
+2026-10-20T07:44:24Z INF Generated Connector ID: d6cdf69c-242f-49f8-a8a5-5a16914a4a62
+2026-10-20T07:44:24Z INF Initial protocol http2
+2026-10-20T07:44:24Z INF ICMP proxy will use 172.30.0.2 as source for IPv4
+2026-10-20T07:44:24Z INF ICMP proxy will use fe80::802b:38ff:fe3d:bcd0 in zone enp0s4 as source for IPv6
+2026/10/20 14:44:24 failed to sufficiently increase receive buffer size (was: 208 kiB, wanted: 7168 kiB, got: 416 kiB). See https://github.com/quic-go/quic-go/wiki/UDP-Buffer-Sizes for details.
+2026-10-20T07:44:24Z INF ICMP proxy will use 172.30.0.2 as source for IPv4
+2026-10-20T07:44:24Z INF ICMP proxy will use fe80::802b:38ff:fe3d:bcd0 in zone enp0s4 as source for IPv6
+2026-10-20T07:44:24Z INF Starting metrics server on 127.0.0.1:20241/metrics
+2026-10-20T07:44:24Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.18.0.1
+2026-10-20T07:44:34Z INF +----------------------------------------------------------------------------------------------------+
+2026-10-20T07:44:34Z INF |                                      CONNECTIVITY PRE-CHECKS                                       |
+2026-10-20T07:44:34Z INF +----------------------------------------------------------------------------------------------------+
+2026-10-20T07:44:34Z INF |  COMPONENT         TARGET                     STATUS  DETAILS                                      |
+2026-10-20T07:44:34Z INF |  DNS Resolution    region1.v2.argotunnel.com  PASS    DNS Resolved successfully                    |
+2026-10-20T07:44:34Z INF |  DNS Resolution    region2.v2.argotunnel.com  PASS    DNS Resolved successfully                    |
+2026-10-20T07:44:34Z INF |  UDP Connectivity  region1.v2.argotunnel.com  FAIL    QUIC connection failed                       |
+2026-10-20T07:44:34Z INF |  UDP Connectivity  region2.v2.argotunnel.com  FAIL    QUIC connection failed                       |
+2026-10-20T07:44:34Z INF |  TCP Connectivity  region1.v2.argotunnel.com  FAIL    HTTP/2 connection is blocked or unreachable  |
+2026-10-20T07:44:34Z INF |  TCP Connectivity  region2.v2.argotunnel.com  FAIL    HTTP/2 connection is blocked or unreachable  |
+2026-10-20T07:44:34Z INF |  Cloudflare API    api.cloudflare.com:443     PASS    API is reachable                             |
+2026-10-20T07:44:34Z INF |  ERROR: Allow outbound QUIC traffic on port 7844 or use HTTP2.                                     |
+2026-10-20T07:44:34Z INF |  ERROR: Allow outbound QUIC traffic on port 7844 or use HTTP2.                                     |
+2026-10-20T07:44:34Z INF |  ERROR: Allow outbound TCP on port 7844.                                                           |
+2026-10-20T07:44:34Z INF |  ERROR: Allow outbound TCP on port 7844.                                                           |
+2026-10-20T07:44:34Z INF |                                                                                                    |
+2026-10-20T07:44:34Z INF |  SUMMARY: Environment has critical failures. cloudflared may not be able to establish a tunnel.    |
+2026-10-20T07:44:34Z INF +----------------------------------------------------------------------------------------------------+
+2026-10-20T07:44:34Z INF precheck component="DNS Resolution" details="DNS Resolved successfully" run_id=67b869a2-7b83-40c4-9e5e-f5bc6f78dad7 status=pass target=region1.v2.argotunnel.com
+2026-10-20T07:44:34Z INF precheck component="DNS Resolution" details="DNS Resolved successfully" run_id=67b869a2-7b83-40c4-9e5e-f5bc6f78dad7 status=pass target=region2.v2.argotunnel.com
+2026-10-20T07:44:34Z INF precheck component="UDP Connectivity" details="QUIC connection failed" run_id=67b869a2-7b83-40c4-9e5e-f5bc6f78dad7 status=fail target=region1.v2.argotunnel.com
+2026-10-20T07:44:34Z INF precheck component="UDP Connectivity" details="QUIC connection failed" run_id=67b869a2-7b83-40c4-9e5e-f5bc6f78dad7 status=fail target=region2.v2.argotunnel.com
+2026-10-20T07:44:34Z INF precheck component="TCP Connectivity" details="HTTP/2 connection is blocked or unreachable" run_id=67b869a2-7b83-40c4-9e5e-f5bc6f78dad7 status=fail target=region1.v2.argotunnel.com
+2026-10-20T07:44:34Z INF precheck component="TCP Connectivity" details="HTTP/2 connection is blocked or unreachable" run_id=67b869a2-7b83-40c4-9e5e-f5bc6f78dad7 status=fail target=region2.v2.argotunnel.com
+2026-10-20T07:44:34Z INF precheck component="Cloudflare API" details="API is reachable" run_id=67b869a2-7b83-40c4-9e5e-f5bc6f78dad7 status=pass target=api.cloudflare.com:443
+2026-10-20T07:44:34Z INF precheck complete hard_fail=true run_id=67b869a2-7b83-40c4-9e5e-f5bc6f78dad7
+2026-10-20T07:44:39Z ERR Unable to establish connection with Cloudflare edge error="DialContext error: dial tcp 198.18.0.1:7844: i/o timeout" connIndex=0 event=0 ip=198.18.0.1
+2026-10-20T07:44:39Z ERR Serve tunnel error error="DialContext error: dial tcp 198.18.0.1:7844: i/o timeout" connIndex=0 event=0 ip=198.18.0.1
+2026-10-20T07:44:39Z INF Retrying connection in up to 2s connIndex=0 event=0 ip=198.18.0.1
+2026-10-20T07:44:40Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.18.0.1
+2026-10-20T07:44:55Z ERR Unable to establish connection with Cloudflare edge error="DialContext error: dial tcp 198.18.0.1:7844: i/o timeout" connIndex=0 event=0 ip=198.18.0.1
+2026-10-20T07:44:55Z ERR Serve tunnel error error="DialContext error: dial tcp 198.18.0.1:7844: i/o timeout" connIndex=0 event=0 ip=198.18.0.1
+2026-10-20T07:44:55Z INF Retrying connection in up to 4s connIndex=0 event=0 ip=198.18.0.1
+2026-10-20T07:44:56Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.18.0.1
+2026-10-20T07:45:11Z ERR Unable to establish connection with Cloudflare edge error="DialContext error: dial tcp 198.18.0.1:7844: i/o timeout" connIndex=0 event=0 ip=198.18.0.1
+2026-10-20T07:45:11Z ERR Serve tunnel error error="DialContext error: dial tcp 198.18.0.1:7844: i/o timeout" connIndex=0 event=0 ip=198.18.0.1
+2026-10-20T07:45:11Z INF Retrying connection in up to 8s connIndex=0 event=0 ip=198.18.0.1
+2026-10-20T07:45:17Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.18.0.1
+2026-10-20T07:45:23Z INF Initiating graceful shutdown due to signal terminated ...
+2026-10-20T07:45:23Z INF Tunnel server stopped
+2026-10-20T07:45:23Z INF Metrics server stopped

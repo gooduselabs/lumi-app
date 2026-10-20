@@ -13,8 +13,8 @@ on:
 
 env:
   FLUTTER_VERSION: "3.47.7"
-  # Priority: manual input > repo variable API_BASE_URL > emulator default
-  API_BASE_URL: ${{ github.event.inputs.api_base_url || vars.API_BASE_URL || 'http://10.0.2.2:3000' }}
+  # Priority: manual input > repo variable API_BASE_URL > public test server (ngrok)
+  API_BASE_URL: ${{ github.event.inputs.api_base_url || vars.API_BASE_URL || 'https://feline-antonym-sizzling.ngrok-free.dev' }}
 
 jobs:
   backend:
