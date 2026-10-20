@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/config/env.dart';
+import '../../../core/config/server_config.dart';
 import '../../../core/l10n_ext.dart';
 import '../../../core/locale_controller.dart';
 import '../../../core/network/api_exception.dart';
@@ -142,7 +143,7 @@ class SettingsScreen extends ConsumerWidget {
               applicationLegalese: l.appTagline,
             ),
           ),
-          ListTile(leading: const Icon(Icons.dns_outlined), title: Text(l.server), subtitle: Text(Env.apiBaseUrl)),
+          ListTile(leading: const Icon(Icons.dns_outlined), title: Text(l.server), subtitle: Text(ServerConfig.current)),
           ListTile(leading: const Icon(Icons.tag_rounded), title: Text(l.version), subtitle: const Text(Env.appVersion)),
         ]),
         section([

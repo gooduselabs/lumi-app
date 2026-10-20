@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/network/api_exception.dart';
@@ -53,7 +55,9 @@ class AuthController extends Notifier<AuthState> {
   Future<void> restore() async {
     state = const AuthRestoring();
     try {
-      _signedIn(await _repo.me());
+      _signedIn(await _repo.me().timeout(const Duration(seconds: 10)));
+    } on TimeoutException catch (e) {
+      state = AuthOffline(e);
     } on ApiException catch (e) {
       if (e.isNetwork) {
         state = AuthOffline(e);

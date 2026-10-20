@@ -853,4 +853,32 @@ class AppLocalizationsVi extends AppLocalizations {
   String restoreDone(int count) {
     return 'Đã khôi phục $count tin nhắn';
   }
+
+  @override
+  String get serverAddress => 'Địa chỉ máy chủ';
+
+  @override
+  String get serverInvalid => 'URL không hợp lệ (vd. http://192.168.1.10:3000)';
+
+  @override
+  String get serverReachable => 'Kết nối được ✓';
+
+  @override
+  String get serverUnreachable => 'Không kết nối được máy chủ';
+
+  @override
+  String get serverDefault => 'Mặc định';
+
+  @override
+  String get serverReset => 'Mặc định';
+
+  @override
+  String get serverTest => 'Kiểm tra';
+
+  @override
+  String get startupError => 'Không khởi động được ứng dụng';
+
+  @override
+  String get offlineHint =>
+      'Không kết nối được máy chủ. Kiểm tra mạng hoặc đổi địa chỉ máy chủ.';
 }

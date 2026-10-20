@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 /// Persists tokens in the platform keystore/keychain and keeps a memory cache.
@@ -15,13 +17,20 @@ class TokenStorage {
   String? get refreshToken => _refresh;
   bool get hasSession => _refresh != null;
 
-  Future<void> load() async {
+  /// Never blocks startup: a slow or broken keystore times out and the app starts signed out.
+  Future<void> load({Duration timeout = const Duration(seconds: 5)}) async {
     try {
-      _access = await _storage.read(key: _kAccess);
-      _refresh = await _storage.read(key: _kRefresh);
+      final values = await Future.wait([_storage.read(key: _kAccess), _storage.read(key: _kRefresh)]).timeout(timeout);
+      _access = values[0];
+      _refresh = values[1];
+    } on TimeoutException {
+      _access = null;
+      _refresh = null;
     } catch (_) {
       // Corrupted keystore (e.g. after restore): start clean.
-      await clear();
+      _access = null;
+      _refresh = null;
+      unawaited(clear().catchError((_) {}));
     }
   }
 

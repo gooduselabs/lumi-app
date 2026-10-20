@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
-import '../config/env.dart';
+import '../config/server_config.dart';
 import '../network/api_client.dart';
 import '../network/api_exception.dart';
 import '../storage/token_storage.dart';
@@ -41,8 +41,9 @@ class SocketService {
     if (_socket != null) return;
     status.value = SocketStatus.connecting;
     final s = io.io(
-      Env.apiBaseUrl,
+      ServerConfig.current,
       io.OptionBuilder()
+          .setTimeout(8000)
           .setTransports(['websocket'])
           .disableAutoConnect()
           .enableReconnection()
@@ -68,6 +69,13 @@ class SocketService {
     }
     s.connect();
     _socket = s;
+  }
+
+  /// Server address changed: drop the old socket and reconnect to the new one if we were connected.
+  void switchServer() {
+    if (_socket == null) return;
+    disconnect();
+    connect();
   }
 
   void reconnect() {

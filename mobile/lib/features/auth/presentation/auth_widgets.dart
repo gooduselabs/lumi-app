@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import '../../../core/l10n_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/common.dart';
+import '../../../core/widgets/lumi_logo.dart';
+import '../../../core/widgets/server_address.dart';
 
 final _emailRe = RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$');
 final _pwRe = RegExp(r'^(?=.*[A-Za-z])(?=.*\d).{8,72}$');
@@ -12,7 +14,8 @@ String? validateEmail(BuildContext c, String? v) => _emailRe.hasMatch((v ?? '').
 String? validatePassword(BuildContext c, String? v) => _pwRe.hasMatch(v ?? '') ? null : c.l10n.validationPassword;
 
 class AuthScaffold extends StatelessWidget {
-  const AuthScaffold({super.key, required this.title, this.subtitle, required this.child, this.showBack = true});
+  const AuthScaffold({super.key, required this.title, this.subtitle, required this.child, this.showBack = true, this.showLogo = false});
+  final bool showLogo;
   final String title;
   final String? subtitle;
   final Widget child;
@@ -37,6 +40,10 @@ class AuthScaffold extends StatelessWidget {
                       icon: const Icon(Icons.arrow_back_rounded),
                     ),
                   const SizedBox(height: 28),
+                  if (showLogo) ...[
+                    const ServerAddressTrigger(child: LumiLogo(size: 44)),
+                    const SizedBox(height: 16),
+                  ],
                   Text(title, style: Theme.of(context).textTheme.headlineMedium),
                   if (subtitle != null) ...[
                     const SizedBox(height: 8),

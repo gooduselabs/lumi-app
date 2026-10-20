@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n_ext.dart';
+import '../../../core/widgets/server_address.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/common.dart';
 import '../../../core/widgets/lumi_avatar.dart';
@@ -22,7 +23,7 @@ class WelcomeScreen extends StatelessWidget {
               const Spacer(),
               const _FloatingAvatars(),
               const SizedBox(height: 28),
-              const LumiLogo(size: 72, showWordmark: true),
+              const ServerAddressTrigger(child: LumiLogo(size: 72, showWordmark: true)),
               const SizedBox(height: 20),
               Text(l.welcomeTitle, textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineSmall?.copyWith(height: 1.25)),
               const SizedBox(height: 12),

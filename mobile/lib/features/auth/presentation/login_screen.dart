@@ -50,6 +50,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
     final l = context.l10n;
     return AuthScaffold(
+      showLogo: true,
       title: l.loginTitle,
       subtitle: l.loginSubtitle,
       child: Form(

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 
-import '../config/env.dart';
+import '../config/server_config.dart';
 import '../storage/token_storage.dart';
 import 'api_exception.dart';
 
@@ -10,17 +10,27 @@ import 'api_exception.dart';
 class ApiClient {
   ApiClient(this._tokens, {String? baseUrl})
       : dio = Dio(BaseOptions(
-          baseUrl: baseUrl ?? Env.apiBaseUrl,
-          connectTimeout: const Duration(seconds: 10),
-          receiveTimeout: const Duration(seconds: 20),
+          baseUrl: baseUrl ?? ServerConfig.current,
+          connectTimeout: connectTimeout,
+          sendTimeout: const Duration(seconds: 15),
+          receiveTimeout: const Duration(seconds: 15),
           contentType: 'application/json',
         )) {
     _refreshDio = Dio(dio.options.copyWith());
     dio.interceptors.add(InterceptorsWrapper(onRequest: _onRequest, onError: _onError));
   }
 
+  /// Short timeouts: an unreachable server must surface as an offline error, never a hang.
+  static const connectTimeout = Duration(seconds: 8);
+
   final TokenStorage _tokens;
   final Dio dio;
+
+  String get baseUrl => dio.options.baseUrl;
+  set baseUrl(String v) {
+    dio.options.baseUrl = v;
+    _refreshDio.options.baseUrl = v;
+  }
   late final Dio _refreshDio;
   Future<bool>? _refreshing;
 

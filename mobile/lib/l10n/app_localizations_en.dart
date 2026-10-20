@@ -846,4 +846,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String restoreDone(int count) {
     return 'Restored $count messages';
   }
+
+  @override
+  String get serverAddress => 'Server address';
+
+  @override
+  String get serverInvalid => 'Invalid URL (e.g. http://192.168.1.10:3000)';
+
+  @override
+  String get serverReachable => 'Reachable ✓';
+
+  @override
+  String get serverUnreachable => 'Server not reachable';
+
+  @override
+  String get serverDefault => 'Default';
+
+  @override
+  String get serverReset => 'Reset';
+
+  @override
+  String get serverTest => 'Test';
+
+  @override
+  String get startupError => 'The app could not start';
+
+  @override
+  String get offlineHint =>
+      'Can\'t reach the server. Check your connection or change the server address.';
 }

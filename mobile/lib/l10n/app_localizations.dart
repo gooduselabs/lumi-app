@@ -1663,6 +1663,60 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Đã khôi phục {count} tin nhắn'**
   String restoreDone(int count);
+
+  /// No description provided for @serverAddress.
+  ///
+  /// In vi, this message translates to:
+  /// **'Địa chỉ máy chủ'**
+  String get serverAddress;
+
+  /// No description provided for @serverInvalid.
+  ///
+  /// In vi, this message translates to:
+  /// **'URL không hợp lệ (vd. http://192.168.1.10:3000)'**
+  String get serverInvalid;
+
+  /// No description provided for @serverReachable.
+  ///
+  /// In vi, this message translates to:
+  /// **'Kết nối được ✓'**
+  String get serverReachable;
+
+  /// No description provided for @serverUnreachable.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không kết nối được máy chủ'**
+  String get serverUnreachable;
+
+  /// No description provided for @serverDefault.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mặc định'**
+  String get serverDefault;
+
+  /// No description provided for @serverReset.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mặc định'**
+  String get serverReset;
+
+  /// No description provided for @serverTest.
+  ///
+  /// In vi, this message translates to:
+  /// **'Kiểm tra'**
+  String get serverTest;
+
+  /// No description provided for @startupError.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không khởi động được ứng dụng'**
+  String get startupError;
+
+  /// No description provided for @offlineHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không kết nối được máy chủ. Kiểm tra mạng hoặc đổi địa chỉ máy chủ.'**
+  String get offlineHint;
 }
 
 class _AppLocalizationsDelegate

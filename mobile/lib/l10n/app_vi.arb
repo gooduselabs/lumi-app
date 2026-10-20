@@ -399,5 +399,14 @@
         "type": "int"
       }
     }
-  }
+  },
+  "serverAddress": "Địa chỉ máy chủ",
+  "serverInvalid": "URL không hợp lệ (vd. http://192.168.1.10:3000)",
+  "serverReachable": "Kết nối được ✓",
+  "serverUnreachable": "Không kết nối được máy chủ",
+  "serverDefault": "Mặc định",
+  "serverReset": "Mặc định",
+  "serverTest": "Kiểm tra",
+  "startupError": "Không khởi động được ứng dụng",
+  "offlineHint": "Không kết nối được máy chủ. Kiểm tra mạng hoặc đổi địa chỉ máy chủ."
 }

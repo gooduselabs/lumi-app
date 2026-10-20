@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import '../../../core/config/env.dart';
+import '../../../core/config/server_config.dart';
 import '../../auth/domain/user.dart';
 
 /// sending → sent (server queued) → delivered (on peer's device). Read is tracked per conversation.
@@ -33,7 +33,7 @@ class ChatAttachment {
   final int? width;
   final int? height;
 
-  String get absoluteUrl => url.startsWith('http') ? url : '${Env.apiBaseUrl}$url';
+  String get absoluteUrl => url.startsWith('http') ? url : '${ServerConfig.current}$url';
   String get downloadUrl => '$absoluteUrl${absoluteUrl.contains('?') ? '&' : '?'}download=1';
 
   ChatAttachment withLocalPath(String? path) => ChatAttachment(

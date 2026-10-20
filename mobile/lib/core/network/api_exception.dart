@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 
 /// Normalized API error. `code` is the stable server error code (e.g. INVALID_CODE).
@@ -25,7 +27,9 @@ class ApiException implements Exception {
     if (e.type == DioExceptionType.connectionError ||
         e.type == DioExceptionType.connectionTimeout ||
         e.type == DioExceptionType.receiveTimeout ||
-        e.type == DioExceptionType.sendTimeout) {
+        e.type == DioExceptionType.sendTimeout ||
+        e.type == DioExceptionType.badCertificate ||
+        (e.type == DioExceptionType.unknown && (e.error is SocketException || e.error is HandshakeException || e.error is HttpException))) {
       return ApiException('NETWORK', 'Network error');
     }
     return ApiException('UNKNOWN', e.message ?? 'Unknown error', status: e.response?.statusCode);
