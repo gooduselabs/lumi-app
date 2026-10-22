@@ -6,7 +6,7 @@
 
 A dating & friendship app with Soul Match, Voice Match, on-device encrypted chat, and mini games for couples.
 
-[**⬇️ Download the app**](https://github.com/gooduselabs/lumi-download/releases)
+[**⬇️ Download the app**](https://github.com/gooduselabs/lumi-app/releases)
 
 </div>
 
@@ -46,4 +46,4 @@ cd ../mobile && flutter run
 
 ## 📥 Download
 
-Latest APK: **https://github.com/gooduselabs/lumi-download/releases**
+Latest APK: **https://github.com/gooduselabs/lumi-app/releases/latest/download/lumi-1.3.0-arm64-v8a.apk** (all releases: https://github.com/gooduselabs/lumi-app/releases)
